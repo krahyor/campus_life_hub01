@@ -1,16 +1,9 @@
-# campusapp
+Campus Repo Main Repo LINK : https://github.com/krahyor/campus_life_hub01 (Group 01)
 
-A new Flutter project.
+Figma Splash Screen และ Onboarding Link : https://www.figma.com/design/drA0RgHq00Qnel0PVu8CyY/Campus_life_hub_01?m=auto&t=Vn0Y6iKUI2J9B3a5-1
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Sesion 01 : https://drive.google.com/drive/folders/1Buvm2Y2pahelAuq9PQXI4xaGrLm924lR?usp=drive_link
+  - Wirefram
+  - Dart Programing Basic Summary
+  - Project link
+  - Splash Screen และ Onboarding
