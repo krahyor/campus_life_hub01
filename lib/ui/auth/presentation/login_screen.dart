@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'auth_service.dart';
 import 'signup_screen.dart';
-import '../../screens/home_screen/home_screen.dart';
 import '../../screens/main_screen/main_screen.dart';
 import '../../widgets/auth_widgets/button.dart';
 import '../../widgets/auth_widgets/textfield.dart';
@@ -51,6 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
               hint: "Enter Password",
               label: "Password",
               controller: _password,
+              isPassword: true,
             ),
             const SizedBox(height: 30),
             CustomButton(label: "Login", onPressed: _login),
