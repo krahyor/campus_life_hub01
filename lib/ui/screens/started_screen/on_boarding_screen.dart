@@ -43,10 +43,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
+  void _previousPage() {
+    if (_currentPage > 0) {
+      _controller.animateToPage(
+        _currentPage - 1,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+    }
+  }
+
   void _goToHome() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('seenOnboarding', true);
-    // await prefs.clear(); // ล้างทั้งหมดเพื่อทดสอบ
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => MainHomeScreen()),
@@ -56,8 +65,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF113F67), // ✅ เปลี่ยนสีพื้นหลังทั้งหน้า
       body: PageView.builder(
         controller: _controller,
+        itemCount: pages.length,
+        onPageChanged: (index) => setState(() => _currentPage = index),
         itemBuilder: (context, index) {
           final page = pages[index];
           return Padding(
@@ -76,12 +88,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 20),
                 Text(
                   page['subtitle']!,
-                  style: const TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 18, color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -91,15 +104,71 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
       bottomSheet: Container(
         height: 80,
-        color: Colors.white,
+        color: const Color(0xFF113F67),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextButton(onPressed: _goToHome, child: const Text('Skip')),
-            ElevatedButton(
-              onPressed: _nextPage,
-              child: Text(_currentPage == pages.length - 1 ? 'Start' : 'Next'),
+            // ฝั่งซ้าย - Previous หรือช่องว่างเท่ากัน
+            SizedBox(
+              width: 80,
+              child:
+                  _currentPage == 0
+                      ? const SizedBox.shrink()
+                      : TextButton(
+                        onPressed: _previousPage,
+                        child: const Text(
+                          'ก่อนหน้า',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+            ),
+
+            // ไข่ปลา - อยู่ตรงกลาง และขยายเต็มพื้นที่ที่เหลือ
+            Expanded(
+              child: Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min, // ให้ขนาดพอดีจุดไข่ปลา
+                  children: List.generate(
+                    pages.length,
+                    (indexDot) => AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      width: _currentPage == indexDot ? 16 : 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color:
+                            _currentPage == indexDot
+                                ? Colors.white
+                                : Colors.white54,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            // ฝั่งขวา - Next / Start ปุ่ม อยู่ใน SizedBox เท่ากับฝั่งซ้าย
+            SizedBox(
+              width: 80,
+              child:
+                  _currentPage == pages.length - 1
+                      ? TextButton(
+                        onPressed: _nextPage,
+                        child: const Text(
+                          'Start',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                      : IconButton(
+                        onPressed: _nextPage,
+                        icon: const Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                        ),
+                        iconSize: 20,
+                        tooltip: 'Next',
+                      ),
             ),
           ],
         ),
