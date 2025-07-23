@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:campusapp/ui/auth/presentation/login_screen.dart';
+import 'package:campusapp/ui/auth/presentation/auth_service.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -29,7 +30,7 @@ class ProfileScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: 20),
+          const SizedBox(height: 5),
           const CircleAvatar(
             radius: 100,
             backgroundImage: AssetImage('assets/profile_picture.png'),
@@ -44,13 +45,24 @@ class ProfileScreen extends StatelessWidget {
             user.email ?? 'user.email@example.com',
             style: const TextStyle(fontSize: 16, color: Colors.grey),
           ),
-          const SizedBox(height: 16),
-          Container(
-            width: 350,
-            height: 400,
-            decoration: BoxDecoration(
-              color: Colors.grey[500],
-              borderRadius: BorderRadius.circular(10),
+          // 🔻 ปุ่ม Logout
+          ElevatedButton.icon(
+            onPressed: () async {
+              await AuthService().signout();
+              if (context.mounted) {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  (route) => false,
+                );
+              }
+            },
+            icon: const Icon(Icons.logout),
+            label: const Text("Logout"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.redAccent,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              textStyle: const TextStyle(fontSize: 16),
             ),
           ),
         ],
