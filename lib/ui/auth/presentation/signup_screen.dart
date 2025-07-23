@@ -1,29 +1,30 @@
-import 'package:flutter/material.dart';
 import 'dart:developer';
 
 import 'auth_service.dart';
-import 'signup_screen.dart';
-import '../../screens/home_screen/home_screen.dart';
-import '../../screens/main_screen/main_screen.dart';
+import 'login_screen.dart';
 import '../../widgets/auth_widgets/button.dart';
 import '../../widgets/auth_widgets/textfield.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+import 'package:flutter/material.dart';
+
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final _auth = AuthService();
 
+  final _name = TextEditingController();
   final _email = TextEditingController();
   final _password = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
+    _name.dispose();
     _email.dispose();
     _password.dispose();
   }
@@ -37,10 +38,16 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             const Spacer(),
             const Text(
-              "Login",
+              "Signup",
               style: TextStyle(fontSize: 40, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 50),
+            CustomTextField(
+              hint: "Enter Name",
+              label: "Name",
+              controller: _name,
+            ),
+            const SizedBox(height: 20),
             CustomTextField(
               hint: "Enter Email",
               label: "Email",
@@ -50,19 +57,20 @@ class _LoginScreenState extends State<LoginScreen> {
             CustomTextField(
               hint: "Enter Password",
               label: "Password",
+              isPassword: true,
               controller: _password,
             ),
             const SizedBox(height: 30),
-            CustomButton(label: "Login", onPressed: _login),
+            CustomButton(label: "Signup", onPressed: _signup),
             const SizedBox(height: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text("Already have an account? "),
                 InkWell(
-                  onTap: () => goToSignup(context),
+                  onTap: () => goToLogin(context),
                   child: const Text(
-                    "Signup",
+                    "Login",
                     style: TextStyle(color: Colors.red),
                   ),
                 ),
@@ -75,25 +83,24 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  goToSignup(BuildContext context) => Navigator.push(
+  goToLogin(BuildContext context) => Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => const SignupScreen()),
+    MaterialPageRoute(builder: (context) => const LoginScreen()),
   );
 
-  goToMainHomeScreen(BuildContext context) => Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => MainHomeScreen()),
-  );
-
-  _login() async {
-    final user = await _auth.loginUserWithEmailAndPassword(
+  _signup() async {
+    final user = await _auth.createUserWithEmailAndPassword(
       _email.text,
       _password.text,
     );
-
     if (user != null) {
-      log("User Logged In");
-      goToMainHomeScreen(context);
+      log("User Created Successfully");
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Signup successful. Please login.')),
+      );
+
+      goToLogin(context);
     }
   }
 }
