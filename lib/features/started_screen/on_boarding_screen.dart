@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../main.dart'; // สำหรับเรียกใช้ MyHomePage
+import '../main_screen/home_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -45,13 +45,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _goToHome() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('seenOnboarding', true); // 👈 บันทึกว่าเคยดูแล้ว
+    await prefs.setBool('seenOnboarding', true);
     // await prefs.clear(); // ล้างทั้งหมดเพื่อทดสอบ
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-        builder: (context) => const MyHomePage(title: 'Home Page'),
-      ),
+      MaterialPageRoute(builder: (context) => MainHomeScreen()),
     );
   }
 
@@ -60,8 +58,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       body: PageView.builder(
         controller: _controller,
-        itemCount: pages.length,
-        onPageChanged: (index) => setState(() => _currentPage = index),
         itemBuilder: (context, index) {
           final page = pages[index];
           return Padding(

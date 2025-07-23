@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'on_boarding_screen.dart';
-import '../../main.dart';
+import '../main_screen/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -20,18 +20,16 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _navigateToNext() async {
     final prefs = await SharedPreferences.getInstance();
-    final seenOnboarding = prefs.getBool('seenOnboarding') ?? false;
-
+    final seenOnboarding =
+        prefs.getBool('seenOnboarding') != null ? true : false;
     // หน่วงเวลา 3 วินาที
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 3));
 
     if (mounted) {
       if (seenOnboarding) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => const MyHomePage(title: 'Home Page'),
-          ),
+          MaterialPageRoute(builder: (context) => MainHomeScreen()),
         );
       } else {
         Navigator.pushReplacement(
