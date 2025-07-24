@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../calendar_screen/calendar_screen.dart';
+import '../events_screen/events_screen.dart';
 import '../home_screen/home_screen.dart';
 import '../profile_screen/profile_screen.dart';
 import '../setting_screen/setting_screen.dart';
@@ -44,10 +44,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
         unselectedItemColor: Colors.blueGrey,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Calendar',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Events'),
           BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add Habit'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           BottomNavigationBarItem(
