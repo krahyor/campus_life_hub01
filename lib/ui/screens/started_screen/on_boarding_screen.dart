@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:campusapp/ui/auth/presentation/login_screen.dart';
 import '../main_screen/main_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // import เพิ่ม
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -17,17 +19,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       'title': 'Welcome',
       'subtitle': 'This is a simple onboarding screen example.',
-      'image': 'assets/onboarding1.png',
+      'image':
+          'https://file.aiquickdraw.com/imgcompressed/img/compressed_aef897d3a1a6dd9c4df2fed767a217c4.webp',
     },
     {
       'title': 'Easy to Use',
       'subtitle': 'Swipe to navigate through onboarding pages.',
-      'image': 'assets/onboarding2.png',
+      'image':
+          'https://file.aiquickdraw.com/imgcompressed/img/compressed_75a84113e2636bbc78bf8073a4909bea.webp',
+    },
+    {
+      'title': 'For Education',
+      'subtitle': 'Swipe to navigate through onboarding pages.',
+      'image':
+          'https://file.aiquickdraw.com/imgcompressed/img/compressed_6ee5a45c92302edeb73568b000d2ced6.webp',
     },
     {
       'title': 'Get Started',
       'subtitle': 'Tap Start to enter the app.',
-      'image': 'assets/onboarding3.png',
+      'image':
+          'https://file.aiquickdraw.com/imgcompressed/img/compressed_f747977b86558a0ffb7440f53affccaf.webp',
     },
   ];
 
@@ -62,113 +73,138 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
+  void _goToLogin() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF113F67), // ✅ เปลี่ยนสีพื้นหลังทั้งหน้า
+      backgroundColor: const Color(0xFF113F67), // สีพื้นหลัง
       body: PageView.builder(
         controller: _controller,
         itemCount: pages.length,
         onPageChanged: (index) => setState(() => _currentPage = index),
         itemBuilder: (context, index) {
           final page = pages[index];
+          final bool showButtons = index == pages.length - 1;
           return Padding(
-            padding: const EdgeInsets.all(40),
+            padding: EdgeInsets.all(40.w), // ปรับด้วย screenutil
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (page['image'] != null)
                   SizedBox(
-                    height: 250,
-                    child: Image.asset(page['image']!, fit: BoxFit.contain),
+                    height: 250.h, // ปรับความสูง
+                    child: Image.network(page['image']!, fit: BoxFit.contain),
                   ),
-                const SizedBox(height: 40),
+                SizedBox(height: 40.h), // spacing
                 Text(
                   page['title']!,
-                  style: const TextStyle(
-                    fontSize: 28,
+                  style: TextStyle(
+                    fontSize: 28.sp, // font size responsive
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 Text(
                   page['subtitle']!,
-                  style: const TextStyle(fontSize: 18, color: Colors.white),
+                  style: TextStyle(fontSize: 18.sp, color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
+                SizedBox(height: 40.h),
+                if (showButtons)
+                  Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: _goToHome,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF34699A),
+                          foregroundColor: Colors.white,
+                          minimumSize: Size(double.infinity, 40.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                        ),
+                        child: const Text('เริ่มต้นใช้งาน'),
+                      ),
+                      SizedBox(height: 12.h),
+                      ElevatedButton(
+                        onPressed: _goToLogin,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF34699A),
+                          foregroundColor: Colors.white,
+                          minimumSize: Size(double.infinity, 40.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                        ),
+                        child: const Text('เข้าสู่ระบบ'),
+                      ),
+                    ],
+                  ),
               ],
             ),
           );
         },
       ),
       bottomSheet: Container(
-        height: 80,
+        height: 80.h,
         color: const Color(0xFF113F67),
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Row(
           children: [
-            // ฝั่งซ้าย - Previous หรือช่องว่างเท่ากัน
             SizedBox(
-              width: 80,
+              width: 80.w,
               child:
                   _currentPage == 0
                       ? const SizedBox.shrink()
                       : TextButton(
                         onPressed: _previousPage,
-                        child: const Text(
+                        child: Text(
                           'ก่อนหน้า',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                          ),
                         ),
                       ),
             ),
-
-            // ไข่ปลา - อยู่ตรงกลาง และขยายเต็มพื้นที่ที่เหลือ
             Expanded(
               child: Center(
                 child: Row(
-                  mainAxisSize: MainAxisSize.min, // ให้ขนาดพอดีจุดไข่ปลา
+                  mainAxisSize: MainAxisSize.min,
                   children: List.generate(
                     pages.length,
                     (indexDot) => AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: _currentPage == indexDot ? 16 : 8,
-                      height: 8,
+                      margin: EdgeInsets.symmetric(horizontal: 4.w),
+                      width: _currentPage == indexDot ? 14.w : 6.w,
+                      height: 8.h,
                       decoration: BoxDecoration(
                         color:
                             _currentPage == indexDot
-                                ? Colors.white
-                                : Colors.white54,
-                        borderRadius: BorderRadius.circular(4),
+                                ? const Color(0xFFFDF5AA)
+                                : const Color(0xFFFDF5AA).withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(4.r),
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-
-            // ฝั่งขวา - Next / Start ปุ่ม อยู่ใน SizedBox เท่ากับฝั่งซ้าย
             SizedBox(
-              width: 80,
-              child:
-                  _currentPage == pages.length - 1
-                      ? TextButton(
-                        onPressed: _nextPage,
-                        child: const Text(
-                          'Start',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      )
-                      : IconButton(
-                        onPressed: _nextPage,
-                        icon: const Icon(
-                          Icons.arrow_forward,
-                          color: Colors.white,
-                        ),
-                        iconSize: 20,
-                        tooltip: 'Next',
-                      ),
+              width: 80.w,
+              child: IconButton(
+                onPressed: _nextPage,
+                icon: const Icon(Icons.arrow_forward, color: Color(0xFFFDF5AA)),
+                iconSize: 18.sp,
+                tooltip: 'Next',
+              ),
             ),
           ],
         ),
