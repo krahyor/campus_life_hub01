@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'ui/screens/started_screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; // เพิ่ม import
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Onboarding Example',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            textTheme: GoogleFonts.promptTextTheme(Theme.of(context).textTheme),
           ),
           home: const SplashScreen(),
         );
