@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'ui/screens/started_screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // เพิ่ม import
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,13 +15,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Onboarding Example',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const SplashScreen(), // 👈 เรียกใช้จากไฟล์ใหม่
+    return ScreenUtilInit(
+      designSize: const Size(375, 812), // ขนาด mockup ที่ออกแบบ UI
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Onboarding Example',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          ),
+          home: const SplashScreen(),
+        );
+      },
     );
   }
 }
