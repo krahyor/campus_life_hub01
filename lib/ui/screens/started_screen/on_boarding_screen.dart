@@ -17,26 +17,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<Map<String, String>> pages = [
     {
-      'title': 'Welcome',
-      'subtitle': 'This is a simple onboarding screen example.',
+      'title': 'ยินดีต้อนรับ',
+      'subtitle':
+          'เตรียมพร้อมสู่การใช้ชีวิตในรั้วมหาวิทยาลัยอย่างมั่นใจ ด้วยแอปเดียวที่ช่วยให้คุณไม่พลาดทุกเรื่องสำคัญ',
       'image':
           'https://file.aiquickdraw.com/imgcompressed/img/compressed_aef897d3a1a6dd9c4df2fed767a217c4.webp',
     },
     {
-      'title': 'Easy to Use',
-      'subtitle': 'Swipe to navigate through onboarding pages.',
+      'title': 'รวมทุกอย่างไว้ในที่เดียว',
+      'subtitle':
+          'ไม่ว่าจะเป็นตารางเรียน กิจกรรม ข่าวสาร หรือเอกสาร ทุกอย่างถูกรวบรวมไว้ให้คุณใช้งานได้ง่าย ๆ',
       'image':
           'https://file.aiquickdraw.com/imgcompressed/img/compressed_75a84113e2636bbc78bf8073a4909bea.webp',
     },
     {
-      'title': 'For Education',
-      'subtitle': 'Swipe to navigate through onboarding pages.',
+      'title': 'วางแผนชีวิตง่ายขึ้น',
+      'subtitle':
+          'ตั้งเป้าหมาย ติดตามความก้าวหน้า จัดการเวลา และสร้างสมดุลระหว่างเรียนและชีวิตส่วนตัว',
       'image':
           'https://file.aiquickdraw.com/imgcompressed/img/compressed_6ee5a45c92302edeb73568b000d2ced6.webp',
     },
     {
-      'title': 'Get Started',
-      'subtitle': 'Tap Start to enter the app.',
+      'title': 'พร้อมเริ่มต้นหรือยัง?',
+      'subtitle':
+          'เพียงไม่กี่คลิก คุณก็พร้อมใช้งานแอปที่จะช่วยให้ชีวิตในมหาวิทยาลัยของคุณง่ายขึ้นกว่าเดิม',
       'image':
           'https://file.aiquickdraw.com/imgcompressed/img/compressed_f747977b86558a0ffb7440f53affccaf.webp',
     },
@@ -105,7 +109,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 Text(
                   page['title']!,
                   style: TextStyle(
-                    fontSize: 28.sp, // font size responsive
+                    fontSize: 24.sp, // font size responsive
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -113,7 +117,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 SizedBox(height: 20.h),
                 Text(
                   page['subtitle']!,
-                  style: TextStyle(fontSize: 18.sp, color: Colors.white),
+                  style: TextStyle(fontSize: 12.sp, color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 40.h),
@@ -125,25 +129,31 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF34699A),
                           foregroundColor: Colors.white,
-                          minimumSize: Size(double.infinity, 40.h),
+                          minimumSize: Size(280.w, 45.h),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12.r),
                           ),
                         ),
-                        child: const Text('เริ่มต้นใช้งาน'),
+                        child: const Text(
+                          'เริ่มต้นใช้งาน',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                       SizedBox(height: 12.h),
                       ElevatedButton(
                         onPressed: _goToLogin,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF34699A),
-                          foregroundColor: Colors.white,
-                          minimumSize: Size(double.infinity, 40.h),
+                          backgroundColor: const Color(0xFFD9EAFF),
+                          foregroundColor: const Color(0xFF113F67),
+                          minimumSize: Size(280.w, 45.h),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12.r),
                           ),
                         ),
-                        child: const Text('เข้าสู่ระบบ'),
+                        child: const Text(
+                          'เข้าสู่ระบบ',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
