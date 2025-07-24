@@ -34,12 +34,26 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
           children: [
-            const Spacer(),
+            // const Spacer(),
+            const SizedBox(height: 200),
             const Text(
-              "Login",
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.w500),
+              "Campus Life Hub",
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w500,
+                color: Color.fromARGB(255, 17, 63, 103),
+              ),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 120),
+            Align(
+              alignment: Alignment.centerLeft, // Align text to the left
+              child: const Text(
+                "Login to your Account",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+              ),
+            ),
+
+            const SizedBox(height: 15),
             CustomTextField(
               hint: "Enter Email",
               label: "Email",
@@ -52,8 +66,12 @@ class _LoginScreenState extends State<LoginScreen> {
               controller: _password,
               isPassword: true,
             ),
-            const SizedBox(height: 30),
-            CustomButton(label: "Login", onPressed: _login),
+            const SizedBox(height: 20),
+            CustomButton(
+              label: "Sign in",
+              onPressed: _login,
+              bttncolor: Color.fromARGB(255, 52, 105, 154),
+            ),
             const SizedBox(height: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

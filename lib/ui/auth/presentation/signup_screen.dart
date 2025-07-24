@@ -36,12 +36,25 @@ class _SignupScreenState extends State<SignupScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
           children: [
-            const Spacer(),
+            // const Spacer(),
+            const SizedBox(height: 200),
             const Text(
-              "Signup",
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.w500),
+              "Campus Life Hub",
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w500,
+                color: Color.fromARGB(255, 17, 63, 103),
+              ),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 120),
+            Align(
+              alignment: Alignment.centerLeft, // Align text to the left
+              child: const Text(
+                "Create your Account",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+              ),
+            ),
+            const SizedBox(height: 15),
             CustomTextField(
               hint: "Enter Name",
               label: "Name",
@@ -61,7 +74,11 @@ class _SignupScreenState extends State<SignupScreen> {
               controller: _password,
             ),
             const SizedBox(height: 30),
-            CustomButton(label: "Signup", onPressed: _signup),
+            CustomButton(
+              label: "Sign up",
+              onPressed: _signup,
+              bttncolor: Color.fromARGB(255, 52, 105, 154),
+            ),
             const SizedBox(height: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
