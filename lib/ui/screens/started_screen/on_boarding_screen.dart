@@ -38,7 +38,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           'https://file.aiquickdraw.com/imgcompressed/img/compressed_6ee5a45c92302edeb73568b000d2ced6.webp',
     },
     {
-      'title': 'พร้อมเริ่มต้นหรือยัง?',
+      'title': 'พร้อมเริ่มต้นหรือยัง ?',
       'subtitle':
           'เพียงไม่กี่คลิก คุณก็พร้อมใช้งานแอปที่จะช่วยให้ชีวิตในมหาวิทยาลัยของคุณง่ายขึ้นกว่าเดิม',
       'image':
@@ -117,7 +117,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 SizedBox(height: 20.h),
                 Text(
                   page['subtitle']!,
-                  style: TextStyle(fontSize: 12.sp, color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    color: Colors.white.withOpacity(0.70),
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 40.h),
@@ -175,11 +178,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ? const SizedBox.shrink()
                       : TextButton(
                         onPressed: _previousPage,
+                        style: ButtonStyle(
+                          splashFactory: NoSplash.splashFactory,
+                          shadowColor: WidgetStateProperty.all(
+                            Colors.transparent,
+                          ),
+                        ),
                         child: Text(
                           'ก่อนหน้า',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 14.sp,
+                            fontSize: 12.sp,
                           ),
                         ),
                       ),
@@ -198,8 +207,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       decoration: BoxDecoration(
                         color:
                             _currentPage == indexDot
-                                ? const Color(0xFFFDF5AA)
-                                : const Color(0xFFFDF5AA).withOpacity(0.5),
+                                ? Colors.white
+                                : Colors.white.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(4.r),
                       ),
                     ),
@@ -211,7 +220,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               width: 80.w,
               child: IconButton(
                 onPressed: _nextPage,
-                icon: const Icon(Icons.arrow_forward, color: Color(0xFFFDF5AA)),
+                style: ButtonStyle(
+                  splashFactory: NoSplash.splashFactory,
+                  shadowColor: WidgetStateProperty.all(Colors.transparent),
+                ),
+                icon: const Icon(Icons.arrow_forward, color: Colors.white),
                 iconSize: 18.sp,
                 tooltip: 'Next',
               ),
