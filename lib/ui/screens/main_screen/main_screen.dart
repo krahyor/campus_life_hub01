@@ -15,7 +15,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   final List<Widget> widgetOptions = const [
     HomeScreen(),
-    CalendarScreen(),
+    EventsScreen(),
     Center(child: Text('Add Habit', style: TextStyle(fontSize: 24))),
     ProfileScreen(),
     SettingsScreen(),
