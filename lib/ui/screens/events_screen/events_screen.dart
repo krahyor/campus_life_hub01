@@ -2,17 +2,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-class CalendarScreen extends StatefulWidget {
-  const CalendarScreen({super.key});
+class EventsScreen extends StatefulWidget {
+  const EventsScreen({super.key});
 
   @override
-  State<CalendarScreen> createState() => _CalendarScreenState();
+  State<EventsScreen> createState() => _EventsScreenState();
 }
 
-class _CalendarScreenState extends State<CalendarScreen> {
+class _EventsScreenState extends State<EventsScreen> {
   late Future<List<Map<String, dynamic>>> futureEvents;
   int currentPage = 0;
   final int itemsPerPage = 4;
+  DateTimeRange? selectedDateRange;
 
   @override
   void initState() {
@@ -26,6 +27,28 @@ class _CalendarScreenState extends State<CalendarScreen> {
     );
     final List<dynamic> jsonData = json.decode(jsonString);
     return jsonData.cast<Map<String, dynamic>>();
+  }
+
+  Future<void> _selectDateRange() async {
+    final DateTime now = DateTime.now();
+    final DateTimeRange? picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+      initialDateRange:
+          selectedDateRange ??
+          DateTimeRange(
+            start: now.subtract(const Duration(days: 7)),
+            end: now.add(const Duration(days: 7)),
+          ),
+    );
+
+    if (picked != null) {
+      setState(() {
+        selectedDateRange = picked;
+        currentPage = 0; // รีเซ็ตหน้าเมื่อเลือกวันที่ใหม่
+      });
+    }
   }
 
   @override
@@ -45,7 +68,24 @@ class _CalendarScreenState extends State<CalendarScreen> {
           return const Center(child: Text("ไม่พบข้อมูลกิจกรรม"));
         }
 
-        final events = snapshot.data!;
+        List<Map<String, dynamic>> events = snapshot.data!;
+
+        if (selectedDateRange != null) {
+          events =
+              events.where((event) {
+                final start = DateTime.tryParse(event["start_date"] ?? '');
+                final end = DateTime.tryParse(event["end_date"] ?? '');
+                if (start == null || end == null) return false;
+                return start.isBefore(
+                      selectedDateRange!.end.add(const Duration(days: 1)),
+                    ) &&
+                    end.isAfter(
+                      selectedDateRange!.start.subtract(
+                        const Duration(days: 1),
+                      ),
+                    );
+              }).toList();
+        }
         final totalPages = (events.length / itemsPerPage).ceil();
 
         // Slice events for current page
@@ -55,6 +95,66 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
         return Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  // Row 1: ปุ่มเลือกช่วงวันที่ อยู่ตรงกลาง
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      children: [
+                        const Spacer(flex: 2),
+                        Expanded(
+                          flex: 6,
+                          child: Center(
+                            child: ElevatedButton.icon(
+                              onPressed: _selectDateRange,
+                              icon: const Icon(Icons.date_range),
+                              label: const Text("เลือกช่วงวันที่"),
+                            ),
+                          ),
+                        ),
+                        const Spacer(flex: 2),
+                      ],
+                    ),
+                  ),
+
+                  // Row 2: ข้อความชิดซ้าย ปุ่มล้างชิดขวา
+                  if (selectedDateRange != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 6,
+                            child: Text(
+                              "แสดงกิจกรรมระหว่าง\n${selectedDateRange!.start.toLocal().toString().split(' ')[0]} ถึง ${selectedDateRange!.end.toLocal().toString().split(' ')[0]}",
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          const Spacer(flex: 2),
+                          Expanded(
+                            flex: 4,
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    selectedDateRange = null;
+                                    currentPage = 0;
+                                  });
+                                },
+                                child: const Text("ล้างช่วงวันที่"),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
