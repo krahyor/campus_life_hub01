@@ -3,6 +3,8 @@ import 'ui/screens/started_screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'ui/providers/subject_provider.dart'; // import provider ของคุณ
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,27 +22,32 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Flutter Onboarding Example',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            textTheme: GoogleFonts.promptTextTheme(Theme.of(context).textTheme),
-            appBarTheme: AppBarTheme(
-              titleTextStyle: GoogleFonts.prompt(
-                textStyle: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => SubjectProvider()),
+            // ถ้ามี provider อื่น ๆ เพิ่มตรงนี้ได้เลย
+          ],
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Flutter Onboarding Example',
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              textTheme: GoogleFonts.promptTextTheme(
+                Theme.of(context).textTheme,
               ),
-              iconTheme: IconThemeData(
-                color: Colors.white, // สีของลูกศร
-                size: 18.sp, // ขนาดของลูกศร (ถ้าต้องการ)
+              appBarTheme: AppBarTheme(
+                titleTextStyle: GoogleFonts.prompt(
+                  textStyle: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+                iconTheme: IconThemeData(color: Colors.white, size: 18.sp),
               ),
             ),
+            home: const SplashScreen(),
           ),
-          home: const SplashScreen(),
         );
       },
     );

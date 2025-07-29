@@ -5,6 +5,8 @@ import '../home_screen/home_screen.dart';
 import '../profile_screen/profile_screen.dart';
 import '../setting_screen/setting_screen.dart';
 import '../schedule_screen/schedule_screen.dart';
+import '../subject_screen/subject_screen.dart';
+import '../subject_screen/take_subject_screen.dart';
 
 class MainHomeScreen extends StatefulWidget {
   @override
@@ -18,8 +20,10 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     HomeScreen(),
     EventsScreen(),
     Center(child: Text('Add Habit', style: TextStyle(fontSize: 24))),
+    SubjectScreen(),
     ProfileScreen(),
     SettingsScreen(),
+    TakeSubjectScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -47,6 +51,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Events'),
           BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add Habit'),
+          BottomNavigationBarItem(icon: Icon(Icons.book), label: "Subject"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
