@@ -3,6 +3,8 @@ import 'ui/screens/started_screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'ui/providers/subject_provider.dart'; // import provider ของคุณ
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,13 +26,9 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Flutter Onboarding Example',
           theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xFF113F67),
-            ),
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             textTheme: GoogleFonts.promptTextTheme(Theme.of(context).textTheme),
             appBarTheme: AppBarTheme(
-              backgroundColor: const Color(0xFF113F67),
-              centerTitle: true,
               titleTextStyle: GoogleFonts.prompt(
                 textStyle: TextStyle(
                   fontSize: 16.sp,
@@ -43,8 +41,8 @@ class MyApp extends StatelessWidget {
                 size: 18.sp, // ขนาดของลูกศร (ถ้าต้องการ)
               ),
             ),
+            home: const SplashScreen(),
           ),
-          home: const SplashScreen(),
         );
       },
     );

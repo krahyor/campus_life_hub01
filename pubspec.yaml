@@ -17,6 +17,7 @@ dependencies:
   firebase_database: ^11.3.10
   flutter_screenutil: ^5.9.0
   google_fonts: ^6.2.1
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:
@@ -32,3 +33,4 @@ flutter:
     - assets/onboarding3.png
     - assets/mock_events/mock_events.json
     - assets/mock_schedule/schedule.json
+    - assets/mock_subjects/mock_subjects.json
