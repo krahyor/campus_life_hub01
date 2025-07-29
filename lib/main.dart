@@ -24,9 +24,13 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Flutter Onboarding Example',
           theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xFF113F67),
+            ),
             textTheme: GoogleFonts.promptTextTheme(Theme.of(context).textTheme),
             appBarTheme: AppBarTheme(
+              backgroundColor: const Color(0xFF113F67),
+              centerTitle: true,
               titleTextStyle: GoogleFonts.prompt(
                 textStyle: TextStyle(
                   fontSize: 16.sp,
