@@ -35,11 +35,6 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Noted', style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color.fromARGB(255, 17, 63, 103),
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
       body: widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: true,
@@ -69,7 +64,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             MaterialPageRoute(builder: (context) => const ScheduleScreen()),
           );
         },
-        child: const Icon(Icons.calendar_today, color: Colors.white),
+        child: const Icon(Icons.schedule, color: Colors.white),
         tooltip: "เปิดตารางเรียน",
       ),
     );
