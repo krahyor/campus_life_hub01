@@ -4,6 +4,7 @@ import '../events_screen/events_screen.dart';
 import '../home_screen/home_screen.dart';
 import '../profile_screen/profile_screen.dart';
 import '../setting_screen/setting_screen.dart';
+import '../schedule_screen/schedule_screen.dart';
 
 class MainHomeScreen extends StatefulWidget {
   @override
@@ -54,6 +55,17 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF11406C),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ScheduleScreen()),
+          );
+        },
+        child: const Icon(Icons.calendar_today, color: Colors.white),
+        tooltip: "เปิดตารางเรียน",
       ),
     );
   }
