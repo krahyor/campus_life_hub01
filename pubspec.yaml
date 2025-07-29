@@ -31,3 +31,4 @@ flutter:
     - assets/onboarding2.png
     - assets/onboarding3.png
     - assets/mock_events/mock_events.json
+    - assets/mock_schedule/schedule.json
