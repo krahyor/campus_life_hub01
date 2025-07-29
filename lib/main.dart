@@ -31,11 +31,15 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Flutter Onboarding Example',
             theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFF113F67),
+              ),
               textTheme: GoogleFonts.promptTextTheme(
                 Theme.of(context).textTheme,
               ),
               appBarTheme: AppBarTheme(
+                backgroundColor: const Color(0xFF113F67),
+                centerTitle: true,
                 titleTextStyle: GoogleFonts.prompt(
                   textStyle: TextStyle(
                     fontSize: 16.sp,
@@ -43,7 +47,10 @@ class MyApp extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                iconTheme: IconThemeData(color: Colors.white, size: 18.sp),
+                iconTheme: IconThemeData(
+                  color: Colors.white, // สีของลูกศร
+                  size: 18.sp, // ขนาดของลูกศร (ถ้าต้องการ)
+                ),
               ),
             ),
             home: const SplashScreen(),
