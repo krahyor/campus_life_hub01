@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:campusapp/ui/auth/presentation/login_screen.dart';
 import 'package:campusapp/ui/auth/presentation/auth_service.dart';
-import '../main_screen/main_screen.dart';
 import 'package:campusapp/core/routes.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -21,10 +20,9 @@ class ProfileScreen extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
+              Navigator.pushNamed(
                 context,
-                MaterialPageRoute(builder: (context) => MainHomeScreen()),
-                (Route<dynamic> route) => false,
+                AppRoutes.home, // ไปหน้า Home
               );
             },
           ),
@@ -50,10 +48,9 @@ class ProfileScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(
+            Navigator.pushNamed(
               context,
-              AppRoutes.home, // route ของ MainHomeScreen
-              (Route<dynamic> route) => false,
+              AppRoutes.home, // ไปหน้า Home
             );
           },
         ),

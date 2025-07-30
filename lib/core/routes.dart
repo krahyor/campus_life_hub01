@@ -6,7 +6,7 @@ import 'package:campusapp/ui/screens/schedule_screen/schedule_screen.dart';
 import 'package:campusapp/ui/auth/presentation/login_screen.dart';
 
 class AppRoutes {
-  static const String home = '/';
+  static const String home = '/home';
   static const String events = '/events';
   static const String profile = '/profile';
   static const String schedule = '/schedule';
