@@ -1,12 +1,12 @@
+import 'package:campusapp/ui/screens/home_screen/home_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../events_screen/events_screen.dart';
-import '../home_screen/home_screen.dart';
 import '../profile_screen/profile_screen.dart';
 import '../setting_screen/setting_screen.dart';
-import '../schedule_screen/schedule_screen.dart';
 import '../subject_screen/subject_screen.dart';
 import '../subject_screen/take_subject_screen.dart';
+import 'package:campusapp/core/routes.dart';
 
 class MainHomeScreen extends StatefulWidget {
   @override
@@ -19,7 +19,6 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   final List<Widget> widgetOptions = const [
     HomeScreen(),
     EventsScreen(),
-    Center(child: Text('Add Habit', style: TextStyle(fontSize: 24))),
     SubjectScreen(),
     ProfileScreen(),
     SettingsScreen(),
@@ -45,7 +44,6 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Events'),
-          BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add Habit'),
           BottomNavigationBarItem(icon: Icon(Icons.book), label: "Subject"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           BottomNavigationBarItem(
@@ -59,10 +57,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF11406C),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ScheduleScreen()),
-          );
+          Navigator.pushNamed(context, AppRoutes.schedule);
         },
         child: const Icon(Icons.schedule, color: Colors.white),
         tooltip: "เปิดตารางเรียน",
