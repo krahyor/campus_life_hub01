@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import '../main_screen/main_screen.dart';
+import 'package:campusapp/core/routes.dart';
 
 class EventsScreen extends StatefulWidget {
   const EventsScreen({super.key});
@@ -100,10 +100,10 @@ class _EventsScreenState extends State<EventsScreen> {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pushAndRemoveUntil(
+                Navigator.pushNamedAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => MainHomeScreen()),
-                  (Route<dynamic> route) => false,
+                  AppRoutes.home, // ไปหน้า Home
+                  (route) => false, // ล้าง stack
                 );
               },
             ),

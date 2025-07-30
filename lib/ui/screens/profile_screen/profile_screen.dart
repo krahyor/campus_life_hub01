@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:campusapp/ui/auth/presentation/login_screen.dart';
 import 'package:campusapp/ui/auth/presentation/auth_service.dart';
 import '../main_screen/main_screen.dart';
+import 'package:campusapp/core/routes.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -45,18 +46,19 @@ class ProfileScreen extends StatelessWidget {
     // ถ้า login แล้ว
     return Scaffold(
       appBar: AppBar(
-        title: const Text('กิจกรรม'),
+        title: const Text('ข้อมูลส่วนตัว'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushAndRemoveUntil(
+            Navigator.pushNamedAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => MainHomeScreen()),
+              AppRoutes.home, // route ของ MainHomeScreen
               (Route<dynamic> route) => false,
             );
           },
         ),
       ),
+
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,

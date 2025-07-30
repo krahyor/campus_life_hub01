@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'ui/providers/subject_provider.dart'; // import provider ของคุณ
+import 'core/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,12 +24,11 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) => SubjectProvider()),
-            // ถ้ามี provider อื่น ๆ เพิ่มตรงนี้ได้เลย
-          ],
+          providers: [ChangeNotifierProvider(create: (_) => SubjectProvider())],
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
+            onGenerateRoute: AppRoutes.onGenerateRoute,
+            initialRoute: AppRoutes.home,
             title: 'Flutter Onboarding Example',
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(
