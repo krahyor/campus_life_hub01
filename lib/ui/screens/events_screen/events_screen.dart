@@ -100,10 +100,9 @@ class _EventsScreenState extends State<EventsScreen> {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
+                Navigator.pushNamed(
                   context,
                   AppRoutes.home, // ไปหน้า Home
-                  (route) => false, // ล้าง stack
                 );
               },
             ),
