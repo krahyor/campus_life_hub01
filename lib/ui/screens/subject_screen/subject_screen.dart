@@ -16,10 +16,6 @@ class SubjectScreen extends StatelessWidget {
         },
         icon: const Icon(Icons.book),
         label: const Text('ไปยังหน้าลงทะเบียนวิชา'),
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: const TextStyle(fontSize: 18),
-        ),
       ),
     );
   }

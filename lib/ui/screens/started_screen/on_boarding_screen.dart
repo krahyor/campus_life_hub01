@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:campusapp/ui/auth/presentation/login_screen.dart';
 import '../main_screen/main_screen.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; // import เพิ่ม
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

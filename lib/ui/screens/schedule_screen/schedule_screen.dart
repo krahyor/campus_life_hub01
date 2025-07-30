@@ -12,7 +12,7 @@ class ScheduleScreen extends StatefulWidget {
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
   late Future<List<Map<String, dynamic>>> futureSchedule;
-  String selectedDay = 'ทั้งหมด';
+  String selectedDay = 'จันทร์';
 
   final List<String> days = [
     'ทั้งหมด',
