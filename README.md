@@ -1,12 +1,41 @@
-Campus Repo Main Repo LINK : https://github.com/krahyor/campus_life_hub01 (Group 01)
+# 🏫 Campus Life Hub - Group 01
 
-Figma Splash Screen และ Onboarding Link : https://www.figma.com/design/drA0RgHq00Qnel0PVu8CyY/Campus_life_hub_01?m=auto&t=Vn0Y6iKUI2J9B3a5-1
+แอปพลิเคชัน Flutter สำหรับจัดการชีวิตนักศึกษา เช่น บัญชีผู้ใช้, การเข้าใช้งาน, และข้อมูลเบื้องต้นของแอป  
+พัฒนาโดยทีม **Group 01** ในโปรเจกต์ Campus Life Hub
 
-Sesion 01 : https://drive.google.com/drive/folders/1Buvm2Y2pahelAuq9PQXI4xaGrLm924lR?usp=drive_link
-  - Wirefram
-  - Dart Programing Basic Summary
-  - Project link
-  - Splash Screen และ Onboarding
+---
+
+## 📦 Repository
+
+🔗 **Main Repository (GitHub):**  
+[👉 campus_life_hub01 - Group 01](https://github.com/krahyor/campus_life_hub01)
+
+---
+
+## 🎨 UI/UX Design (Figma)
+
+🔗 **Figma Design:**  
+[👉 Splash Screen & Onboarding (Figma)](https://www.figma.com/design/drA0RgHq00Qnel0PVu8CyY/Campus_life_hub_01?m=auto&t=Vn0Y6iKUI2J9B3a5-1)
+
+---
+
+## 📁 Session 01 Resources
+
+🔗 **Google Drive Folder:**  
+[👉 Session 01 - Drive Link](https://drive.google.com/drive/folders/1Buvm2Y2pahelAuq9PQXI4xaGrLm924lR?usp=drive_link)
+
+ภายในประกอบด้วย:
+
+- ✅ Wireframe (หน้าตาคร่าว ๆ ของแอป)
+- ✅ Dart Programming Basic Summary (สรุปพื้นฐานภาษา Dart)
+- ✅ Project Link (ลิงก์โปรเจกต์เวอร์ชันแรก)
+- ✅ Figma: Splash Screen และ Onboarding
+
+---
+
+## 🧱 โครงสร้างโฟลเดอร์ (Project Structure)
+
+
 
 ## Architecture
 ```base 
