@@ -1,17 +1,18 @@
-import 'package:flutter/material.dart';
 import 'dart:developer';
+import 'package:flutter/material.dart';
 
-import 'auth_service.dart';
-import 'signup_screen.dart';
 import '../../screens/main_screen/main_screen.dart';
 import '../../widgets/auth_widgets/button.dart';
 import '../../widgets/auth_widgets/textfield.dart';
+
+import 'auth_service.dart';
+import 'signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -35,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           children: [
             // const Spacer(),
-            const SizedBox(height: 200),
+            const SizedBox(height: 140),
             const Text(
               "Campus Life Hub",
               style: TextStyle(
@@ -44,31 +45,31 @@ class _LoginScreenState extends State<LoginScreen> {
                 color: Color.fromARGB(255, 17, 63, 103),
               ),
             ),
-            const SizedBox(height: 120),
+            const SizedBox(height: 40),
             Align(
               alignment: Alignment.centerLeft, // Align text to the left
               child: const Text(
-                "Login to your Account",
+                "เข้าสู่ระบบ",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
               ),
             ),
 
             const SizedBox(height: 15),
             CustomTextField(
-              hint: "Enter Email",
-              label: "Email",
+              hint: "กรุณากรอกอีเมล",
+              label: "อีเมล",
               controller: _email,
             ),
             const SizedBox(height: 20),
             CustomTextField(
-              hint: "Enter Password",
-              label: "Password",
+              hint: "กรุณากรอกรหัสผ่าน",
+              label: "รหัสผ่าน",
               controller: _password,
               isPassword: true,
             ),
             const SizedBox(height: 20),
             CustomButton(
-              label: "Sign in",
+              label: "เข้าสู่ระบบ",
               onPressed: _login,
               bttncolor: Color.fromARGB(255, 52, 105, 154),
             ),
@@ -76,17 +77,16 @@ class _LoginScreenState extends State<LoginScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("Already have an account? "),
+                const Text("คุณยังไม่มีบัญชีผู้ใช้? "),
                 InkWell(
                   onTap: () => goToSignup(context),
                   child: const Text(
-                    "Signup",
+                    "สมัครสมาชิก",
                     style: TextStyle(color: Colors.red),
                   ),
                 ),
               ],
             ),
-            const Spacer(),
           ],
         ),
       ),
@@ -110,7 +110,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     if (user != null) {
-      log("User Logged In");
+      if (!mounted) return;
+      log("สมัครสมาชิกสำเร็จ: ${user.email}");
       goToMainHomeScreen(context);
     }
   }
