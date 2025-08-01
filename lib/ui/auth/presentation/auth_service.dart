@@ -44,4 +44,14 @@ class AuthService {
       log("Something went wrong");
     }
   }
+
+  Future<bool> isEmailExists(String email) async {
+    try {
+      final methods = await _auth.fetchSignInMethodsForEmail(email);
+      return methods.isNotEmpty;
+    } catch (e) {
+      log("Error checking email existence: $e");
+      return false;
+    }
+  }
 }

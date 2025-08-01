@@ -1,11 +1,15 @@
 import 'dart:developer';
 
-import 'auth_service.dart';
-import 'login_screen.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import '../../widgets/auth_widgets/button.dart';
 import '../../widgets/auth_widgets/textfield.dart';
+import '../../../models/account.dart';
+import '../../service/user_service.dart';
 
-import 'package:flutter/material.dart';
+import 'auth_service.dart';
+import 'login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -17,84 +21,197 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final _auth = AuthService();
 
-  final _name = TextEditingController();
+  final _firstName = TextEditingController();
   final _email = TextEditingController();
   final _password = TextEditingController();
+  final _lastName = TextEditingController();
+  final _group = TextEditingController();
+  final _age = TextEditingController();
+  Year _selectedYear = Year.year1;
+  Faculty _selectedFaculty = Faculty.computerEngineering;
 
   @override
   void dispose() {
     super.dispose();
-    _name.dispose();
+    _firstName.dispose();
     _email.dispose();
     _password.dispose();
+    _lastName.dispose();
+    _group.dispose();
+    _age.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25),
-        child: Column(
-          children: [
-            // const Spacer(),
-            const SizedBox(height: 200),
-            const Text(
-              "Campus Life Hub",
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w500,
-                color: Color.fromARGB(255, 17, 63, 103),
-              ),
-            ),
-            const SizedBox(height: 120),
-            Align(
-              alignment: Alignment.centerLeft, // Align text to the left
-              child: const Text(
-                "Create your Account",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-              ),
-            ),
-            const SizedBox(height: 15),
-            CustomTextField(
-              hint: "Enter Name",
-              label: "Name",
-              controller: _name,
-            ),
-            const SizedBox(height: 20),
-            CustomTextField(
-              hint: "Enter Email",
-              label: "Email",
-              controller: _email,
-            ),
-            const SizedBox(height: 20),
-            CustomTextField(
-              hint: "Enter Password",
-              label: "Password",
-              isPassword: true,
-              controller: _password,
-            ),
-            const SizedBox(height: 30),
-            CustomButton(
-              label: "Sign up",
-              onPressed: _signup,
-              bttncolor: Color.fromARGB(255, 52, 105, 154),
-            ),
-            const SizedBox(height: 5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Already have an account? "),
-                InkWell(
-                  onTap: () => goToLogin(context),
-                  child: const Text(
-                    "Login",
-                    style: TextStyle(color: Colors.red),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Center(
+                child: Text(
+                  "Campus Life Hub",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w500,
+                    color: Color.fromARGB(255, 17, 63, 103),
                   ),
                 ),
-              ],
-            ),
-            const Spacer(),
-          ],
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  "สร้างบัญชีผู้ใช้",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    color: Color.fromARGB(255, 17, 63, 103),
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(16), // ระยะขอบด้านในกรอบ
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade400), // สีเส้นขอบ
+                  borderRadius: BorderRadius.circular(8), // มุมโค้งมน
+                  color: Colors.white, // สีพื้นหลังกรอบ (ถ้าต้องการ)
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "ข้อมูลผู้ใช้",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    CustomTextField(
+                      hint: "กรุณากรอกอีเมล",
+                      label: "อีเมล",
+                      controller: _email,
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      hint: "กรุณากรอกรหัสผ่าน",
+                      label: "รหัสผ่าน",
+                      isPassword: true,
+                      controller: _password,
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade400),
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "ข้อมูลนักศึกษา",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    CustomDropdownField<Year>(
+                      label: 'ปีการศึกษา',
+                      value: _selectedYear,
+                      items:
+                          Year.values.map((year) {
+                            return DropdownMenuItem(
+                              value: year,
+                              child: Text(
+                                'ปี ${Year.values.indexOf(year) + 1}',
+                              ),
+                            );
+                          }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedYear = value!;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    CustomDropdownField<Faculty>(
+                      label: 'คณะ',
+                      value: _selectedFaculty,
+                      items:
+                          Faculty.values.map((faculty) {
+                            return DropdownMenuItem(
+                              value: faculty,
+                              child: Text(faculty.displayName),
+                            );
+                          }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedFaculty = value!;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      hint: "กรุณากรอกชื่อ",
+                      label: "ชื่อ",
+                      controller: _firstName,
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      hint: "กรุณากรอกนามสกุล",
+                      label: "นามสกุล",
+                      controller: _lastName,
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      hint: "กรุณากรอกอายุ",
+                      label: "อายุ",
+                      controller: _age,
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      hint: "กรุณากรอกเทอม",
+                      label: "เทอม",
+                      controller: _group,
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 30),
+              Align(
+                child: CustomButton(
+                  label: "สมัครสมาชิก",
+                  onPressed: _signup,
+                  bttncolor: Color.fromARGB(255, 52, 105, 154),
+                ),
+              ),
+              const SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("คุณมีบัญชีผู้ใช้แล้ว?"),
+                  InkWell(
+                    onTap: () => goToLogin(context),
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
     );
@@ -106,18 +223,79 @@ class _SignupScreenState extends State<SignupScreen> {
   );
 
   _signup() async {
+    final userService = UserService();
+    final messenger = ScaffoldMessenger.of(context); // จับไว้ก่อน await
+    final navigator = Navigator.of(context); // จับไว้ก่อน await
+
+    if (_email.text.isEmpty || !_email.text.contains('@')) {
+      messenger.showSnackBar(
+        const SnackBar(content: Text('กรุณากรอกอีเมลให้ถูกต้อง')),
+      );
+      return;
+    }
+
+    final isEmailExists = await _auth.isEmailExists(_email.text);
+    if (!mounted) return;
+    if (isEmailExists) {
+      messenger.showSnackBar(
+        const SnackBar(content: Text('อีเมลนี้ถูกใช้ไปแล้ว')),
+      );
+      return;
+    }
+
+    if (_password.text.isEmpty || _password.text.length < 6) {
+      messenger.showSnackBar(
+        const SnackBar(content: Text('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร')),
+      );
+      return;
+    }
+
+    if (_firstName.text.isEmpty || _lastName.text.isEmpty) {
+      messenger.showSnackBar(
+        const SnackBar(content: Text('กรุณากรอกชื่อและนามสกุล')),
+      );
+      return;
+    }
+
+    if (_age.text.isEmpty || int.tryParse(_age.text) == null) {
+      messenger.showSnackBar(
+        const SnackBar(content: Text('กรุณากรอกอายุเป็นตัวเลข')),
+      );
+      return;
+    }
+
+    final userModel = User(
+      email: _email.text,
+      password: _password.text,
+      firstName: _firstName.text,
+      lastName: _lastName.text,
+      year: _selectedYear,
+      group: _group.text,
+      age: int.tryParse(_age.text) ?? 18,
+      faculty: _selectedFaculty,
+    );
+
     final user = await _auth.createUserWithEmailAndPassword(
       _email.text,
       _password.text,
     );
+
     if (user != null) {
-      log("User Created Successfully");
+      await userService.saveUser(user.uid, userModel);
+      if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Signup successful. Please login.')),
+      log("สมัครสมาชิกสำเร็จ: ${user.email}");
+      messenger.showSnackBar(
+        const SnackBar(content: Text('สมัครสมาชิกสำเร็จ กรุณาเข้าสู่ระบบ')),
       );
-
-      goToLogin(context);
+      navigator.push(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    } else {
+      if (!mounted) return;
+      messenger.showSnackBar(
+        const SnackBar(content: Text('สมัครสมาชิกไม่สำเร็จ กรุณาลองใหม่')),
+      );
     }
   }
 }
