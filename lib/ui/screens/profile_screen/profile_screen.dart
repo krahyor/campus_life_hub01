@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:campusapp/ui/auth/presentation/login_screen.dart';
-import 'package:campusapp/ui/auth/presentation/auth_service.dart';
+import 'package:campusapp/ui/screens/account_screen/login_screen.dart';
+import 'package:campusapp/ui/providers/auth_provider.dart';
 import 'package:campusapp/core/routes.dart';
-import '../../service/profile_service.dart'; // import service
+import '../../providers/profile_provider.dart'; // import service
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -24,7 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<Map<String, dynamic>?> _getUserProfile() {
     if (_firebaseUser == null) return Future.value(null);
-    return _userService.getUserProfile(_firebaseUser!.uid);
+    return _userService.getUserProfile(_firebaseUser.uid);
   }
 
   @override

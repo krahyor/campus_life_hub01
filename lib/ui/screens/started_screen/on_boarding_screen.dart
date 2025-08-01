@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:campusapp/ui/auth/presentation/login_screen.dart';
+import 'package:campusapp/ui/screens/account_screen/login_screen.dart';
 import '../main_screen/main_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

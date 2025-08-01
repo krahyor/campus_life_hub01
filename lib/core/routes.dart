@@ -3,7 +3,7 @@ import 'package:campusapp/ui/screens/main_screen/main_screen.dart';
 import 'package:campusapp/ui/screens/events_screen/events_screen.dart';
 import 'package:campusapp/ui/screens/profile_screen/profile_screen.dart';
 import 'package:campusapp/ui/screens/schedule_screen/schedule_screen.dart';
-import 'package:campusapp/ui/auth/presentation/login_screen.dart';
+import 'package:campusapp/ui/screens/account_screen/login_screen.dart';
 
 class AppRoutes {
   static const String home = '/home';
