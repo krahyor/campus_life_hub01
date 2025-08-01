@@ -9,7 +9,10 @@ import '../subject_screen/take_subject_screen.dart';
 import 'package:campusapp/core/routes.dart';
 
 class MainHomeScreen extends StatefulWidget {
+  const MainHomeScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _MainHomeScreenState createState() => _MainHomeScreenState();
 }
 
@@ -33,6 +36,14 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var floatingActionButton = FloatingActionButton(
+      backgroundColor: const Color(0xFF11406C),
+      onPressed: () {
+        Navigator.pushNamed(context, AppRoutes.schedule);
+      },
+      tooltip: "เปิดตารางเรียน",
+      child: const Icon(Icons.schedule, color: Colors.white),
+    );
     return Scaffold(
       body: widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
@@ -54,14 +65,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF11406C),
-        onPressed: () {
-          Navigator.pushNamed(context, AppRoutes.schedule);
-        },
-        child: const Icon(Icons.schedule, color: Colors.white),
-        tooltip: "เปิดตารางเรียน",
-      ),
+      floatingActionButton: floatingActionButton,
     );
   }
 }
