@@ -45,3 +45,10 @@ app.*.map.json
 /android/app/release
 /android/app/google-services.json
 /assets/.env
+
+
+# Flutter auto-generated
+linux/flutter/generated_*
+macos/Flutter/GeneratedPluginRegistrant.swift
+windows/flutter/generated_*
+
