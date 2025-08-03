@@ -26,6 +26,13 @@ class SubjectProvider with ChangeNotifier {
     }
   }
 
+  void unregisteredSubject(String subjectId) {
+    if (_registeredSubjectIds.contains(subjectId)) {
+      _registeredSubjectIds.remove(subjectId);
+      notifyListeners();
+    }
+  }
+
   bool isRegistered(String subjectId) {
     return _registeredSubjectIds.contains(subjectId);
   }
