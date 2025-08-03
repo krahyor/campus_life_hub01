@@ -33,61 +33,63 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25),
-        child: Column(
-          children: [
-            // const Spacer(),
-            const SizedBox(height: 140),
-            const Text(
-              "Campus Life Hub",
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w500,
-                color: Color.fromARGB(255, 17, 63, 103),
-              ),
-            ),
-            const SizedBox(height: 40),
-            Align(
-              alignment: Alignment.centerLeft, // Align text to the left
-              child: const Text(
-                "เข้าสู่ระบบ",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-              ),
-            ),
-
-            const SizedBox(height: 15),
-            CustomTextField(
-              hint: "กรุณากรอกอีเมล",
-              label: "อีเมล",
-              controller: _email,
-            ),
-            const SizedBox(height: 20),
-            CustomTextField(
-              hint: "กรุณากรอกรหัสผ่าน",
-              label: "รหัสผ่าน",
-              controller: _password,
-              isPassword: true,
-            ),
-            const SizedBox(height: 20),
-            CustomButton(
-              label: "เข้าสู่ระบบ",
-              onPressed: _login,
-              bttncolor: Color.fromARGB(255, 52, 105, 154),
-            ),
-            const SizedBox(height: 5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("คุณยังไม่มีบัญชีผู้ใช้? "),
-                InkWell(
-                  onTap: () => goToSignup(context),
-                  child: const Text(
-                    "สมัครสมาชิก",
-                    style: TextStyle(color: Colors.red),
-                  ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // const Spacer(),
+              const SizedBox(height: 140),
+              const Text(
+                "Campus Life Hub",
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w500,
+                  color: Color.fromARGB(255, 17, 63, 103),
                 ),
-              ],
-            ),
-          ],
+              ),
+              const SizedBox(height: 40),
+              Align(
+                alignment: Alignment.centerLeft, // Align text to the left
+                child: const Text(
+                  "เข้าสู่ระบบ",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                ),
+              ),
+
+              const SizedBox(height: 15),
+              CustomTextField(
+                hint: "กรุณากรอกอีเมล",
+                label: "อีเมล",
+                controller: _email,
+              ),
+              const SizedBox(height: 20),
+              CustomTextField(
+                hint: "กรุณากรอกรหัสผ่าน",
+                label: "รหัสผ่าน",
+                controller: _password,
+                isPassword: true,
+              ),
+              const SizedBox(height: 20),
+              CustomButton(
+                label: "เข้าสู่ระบบ",
+                onPressed: _login,
+                bttncolor: Color.fromARGB(255, 52, 105, 154),
+              ),
+              const SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("คุณยังไม่มีบัญชีผู้ใช้? "),
+                  InkWell(
+                    onTap: () => goToSignup(context),
+                    child: const Text(
+                      "สมัครสมาชิก",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -109,10 +111,16 @@ class _LoginScreenState extends State<LoginScreen> {
       _password.text,
     );
 
-    if (user != null) {
-      if (!mounted) return;
-      log("สมัครสมาชิกสำเร็จ: ${user.email}");
-      goToMainHomeScreen(context);
+    if (user == null) {
+      log("เข้าสู่ระบบล้มเหลว: ${_email.text}");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("เข้าสู่ระบบล้มเหลว กรุณาลองใหม่")),
+      );
+      return;
     }
+
+    if (!mounted) return;
+    log("สมัครสมาชิกสำเร็จ: ${user.email}");
+    goToMainHomeScreen(context);
   }
 }
