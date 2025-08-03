@@ -43,22 +43,17 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Campus Life Hub'),
+        backgroundColor: const Color(0xFF113F67),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Center(
-                child: Text(
-                  "Campus Life Hub",
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromARGB(255, 17, 63, 103),
-                  ),
-                ),
-              ),
               Align(
                 alignment: Alignment.center,
                 child: Text(
@@ -223,7 +218,6 @@ class _SignupScreenState extends State<SignupScreen> {
 
   _signup() async {
     final userService = UserService();
-    final messenger = ScaffoldMessenger.of(context); // จับไว้ก่อน await
     final navigator = Navigator.of(context); // จับไว้ก่อน await
 
     if (_email.text.isEmpty || !_email.text.contains('@')) {
