@@ -22,7 +22,7 @@
 ## 📁 Session 01 Resources
 
 🔗 **Google Drive Folder:**  
-[👉 Session 01 - Drive Link](https://drive.google.com/drive/folders/1Buvm2Y2pahelAuq9PQXI4xaGrLm924lR?usp=drive_link)
+[👉 Drive Link](https://drive.google.com/drive/folders/1vMi7lpKKdgaSfGteFcaVJSakuMO7krmj?usp=drive_link)
 
 ภายในประกอบด้วย:
 
