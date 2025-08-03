@@ -36,14 +36,14 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var floatingActionButton = FloatingActionButton(
-      backgroundColor: const Color(0xFF11406C),
-      onPressed: () {
-        Navigator.pushNamed(context, AppRoutes.schedule);
-      },
-      tooltip: "เปิดตารางเรียน",
-      child: const Icon(Icons.schedule, color: Colors.white),
-    );
+    // var floatingActionButton = FloatingActionButton(
+    //   backgroundColor: const Color(0xFF11406C),
+    //   onPressed: () {
+    //     Navigator.pushNamed(context, AppRoutes.schedule);
+    //   },
+    //   tooltip: "เปิดตารางเรียน",
+    //   child: const Icon(Icons.schedule, color: Colors.white),
+    // );
     return Scaffold(
       body: widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
@@ -65,7 +65,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
-      floatingActionButton: floatingActionButton,
+      // floatingActionButton: floatingActionButton,
     );
   }
 }
