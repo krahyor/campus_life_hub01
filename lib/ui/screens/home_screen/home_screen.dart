@@ -7,34 +7,15 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA),
+      appBar: AppBar(
+        title: const Text('Campus Life Hub'),
+        backgroundColor: const Color(0xFF113F67),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            // Header
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(Icons.arrow_back, color: Colors.black),
-                  // เส้นหยัก/โลโก้/แถบสถานะ
-                  Container(
-                    height: 40,
-                    width: 120,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          'assets/wave_logo.png',
-                        ), // ใส่โลโก้หรือเส้นหยัก
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                  Icon(Icons.notifications, color: Colors.black),
-                ],
-              ),
-            ),
-            // Banner (Slideshow)
             SizedBox(
               height: 180,
               child: PageView.builder(
