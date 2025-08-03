@@ -197,11 +197,11 @@ class _SignupScreenState extends State<SignupScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("คุณมีบัญชีผู้ใช้แล้ว?"),
+                  const Text("คุณมีบัญชีผู้ใช้แล้ว? "),
                   InkWell(
                     onTap: () => goToLogin(context),
                     child: const Text(
-                      "Login",
+                      "เข้าสู่ระบบ",
                       style: TextStyle(color: Colors.red),
                     ),
                   ),
