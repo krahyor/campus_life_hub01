@@ -1,12 +1,10 @@
 import 'package:campusapp/ui/screens/home_screen/home_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../events_screen/events_screen.dart';
 import '../profile_screen/profile_screen.dart';
 import '../setting_screen/setting_screen.dart';
-import '../subject_screen/subject_screen.dart';
 import '../subject_screen/take_subject_screen.dart';
-import 'package:campusapp/core/routes.dart';
+import '../schedule_screen/schedule_screen.dart';
 
 class MainHomeScreen extends StatefulWidget {
   const MainHomeScreen({super.key});
@@ -21,8 +19,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   final List<Widget> widgetOptions = const [
     HomeScreen(),
-    EventsScreen(),
-    SubjectScreen(),
+    ScheduleScreen(),
     ProfileScreen(),
     SettingsScreen(),
     TakeSubjectScreen(),
@@ -36,14 +33,6 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // var floatingActionButton = FloatingActionButton(
-    //   backgroundColor: const Color(0xFF11406C),
-    //   onPressed: () {
-    //     Navigator.pushNamed(context, AppRoutes.schedule);
-    //   },
-    //   tooltip: "เปิดตารางเรียน",
-    //   child: const Icon(Icons.schedule, color: Colors.white),
-    // );
     return Scaffold(
       body: widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
@@ -53,14 +42,13 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
         selectedItemColor: Colors.amber,
         unselectedItemColor: Colors.blueGrey,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Events'),
-          BottomNavigationBarItem(icon: Icon(Icons.book), label: "Subject"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'หน้าหลัก'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.calendar_month),
+            label: "ตารางเรียน",
           ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'โปรไฟล์'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'ตั้งค่า'),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
