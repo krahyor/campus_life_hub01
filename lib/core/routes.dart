@@ -4,6 +4,11 @@ import 'package:campusapp/ui/screens/events_screen/events_screen.dart';
 import 'package:campusapp/ui/screens/profile_screen/profile_screen.dart';
 import 'package:campusapp/ui/screens/schedule_screen/schedule_screen.dart';
 import 'package:campusapp/ui/screens/account_screen/login_screen.dart';
+import 'package:campusapp/ui/screens/map_screen/map_screen.dart';
+import 'package:campusapp/ui/screens/group_screen/group_screen.dart';
+import 'package:campusapp/ui/screens/example_info_screen/example_info_screen.dart';
+import 'package:campusapp/ui/screens/simulation_screen/simulation_screen.dart';
+import 'package:campusapp/ui/screens/subject_screen/subject_screen.dart';
 
 class AppRoutes {
   static const String home = '/home';
@@ -11,21 +16,41 @@ class AppRoutes {
   static const String profile = '/profile';
   static const String schedule = '/schedule';
   static const String login = '/login';
+  static const String map = '/map';
+  static const String group = '/group';
+  static const String exampleInfo = '/exampleInfo';
+  static const String simulation = '/simulation';
+  static const String subject = '/subject';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case home:
-        return _buildSlideRoute(MainHomeScreen(), settings);
+        return _buildSlideRoute(const MainHomeScreen(), settings);
       case events:
-        return _buildSlideRoute(EventsScreen(), settings);
+        return _buildSlideRoute(const EventsScreen(), settings);
       case profile:
-        return _buildSlideRoute(ProfileScreen(), settings);
+        return _buildSlideRoute(const ProfileScreen(), settings);
       case schedule:
-        return _buildSlideRoute(ScheduleScreen(), settings);
+        return _buildSlideRoute(const ScheduleScreen(), settings);
       case login:
-        return _buildSlideRoute(LoginScreen(), settings);
+        return _buildSlideRoute(const LoginScreen(), settings);
+      case map:
+        return _buildSlideRoute(const MapScreen(), settings);
+      case group:
+        return _buildSlideRoute(const GroupScreen(), settings);
+      case exampleInfo:
+        return _buildSlideRoute(const ExampleInfoScreen(), settings);
+      case simulation:
+        return _buildSlideRoute(const SimulationScreen(), settings);
+      case subject:
+        return _buildSlideRoute(const SubjectScreen(), settings);
       default:
-        return _buildSlideRoute(MainHomeScreen(), settings);
+        return MaterialPageRoute(
+          builder:
+              (_) => const Scaffold(
+                body: Center(child: Text('404 - Page Not Found')),
+              ),
+        );
     }
   }
 
