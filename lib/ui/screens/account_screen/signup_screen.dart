@@ -1,6 +1,7 @@
 import 'dart:developer';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
+
 import '../../widgets/auth_widgets/button.dart';
 import '../../widgets/auth_widgets/textfield.dart';
 import '../../../models/account.dart';
@@ -226,38 +227,70 @@ class _SignupScreenState extends State<SignupScreen> {
     final navigator = Navigator.of(context); // จับไว้ก่อน await
 
     if (_email.text.isEmpty || !_email.text.contains('@')) {
-      messenger.showSnackBar(
-        const SnackBar(content: Text('กรุณากรอกอีเมลให้ถูกต้อง')),
+      Fluttertoast.showToast(
+        msg: "กรุณากรอกอีเมลให้ถูกต้อง",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
+
       return;
     }
 
     final isEmailExists = await _auth.isEmailExists(_email.text);
     if (!mounted) return;
     if (isEmailExists) {
-      messenger.showSnackBar(
-        const SnackBar(content: Text('อีเมลนี้ถูกใช้ไปแล้ว')),
+      Fluttertoast.showToast(
+        msg: "อีเมลนี้ถูกใช้ไปแล้ว",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
+
       return;
     }
 
     if (_password.text.isEmpty || _password.text.length < 6) {
-      messenger.showSnackBar(
-        const SnackBar(content: Text('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร')),
+      Fluttertoast.showToast(
+        msg: "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
       return;
     }
 
     if (_firstName.text.isEmpty || _lastName.text.isEmpty) {
-      messenger.showSnackBar(
-        const SnackBar(content: Text('กรุณากรอกชื่อและนามสกุล')),
+      Fluttertoast.showToast(
+        msg: "กรุณากรอกชื่อและนามสกุล",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
       return;
     }
 
     if (_age.text.isEmpty || int.tryParse(_age.text) == null) {
-      messenger.showSnackBar(
-        const SnackBar(content: Text('กรุณากรอกอายุเป็นตัวเลข')),
+      Fluttertoast.showToast(
+        msg: "กรุณากรอกอายุเป็นตัวเลข",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
       return;
     }
@@ -282,17 +315,28 @@ class _SignupScreenState extends State<SignupScreen> {
       await userService.saveUser(user.uid, userModel);
       if (!mounted) return;
 
-      log("สมัครสมาชิกสำเร็จ: ${user.email}");
-      messenger.showSnackBar(
-        const SnackBar(content: Text('สมัครสมาชิกสำเร็จ กรุณาเข้าสู่ระบบ')),
+      Fluttertoast.showToast(
+        msg: "สมัครสมาชิกสำเร็จ กรุณาเข้าสู่ระบบ",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
       navigator.push(
         MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
     } else {
       if (!mounted) return;
-      messenger.showSnackBar(
-        const SnackBar(content: Text('สมัครสมาชิกไม่สำเร็จ กรุณาลองใหม่')),
+      Fluttertoast.showToast(
+        msg: "สมัครสมาชิกไม่สำเร็จ กรุณาลองใหม่",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
     }
   }

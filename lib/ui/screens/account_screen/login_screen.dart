@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../main_screen/main_screen.dart';
 import '../../widgets/auth_widgets/button.dart';
@@ -113,14 +114,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (user == null) {
       log("เข้าสู่ระบบล้มเหลว: ${_email.text}");
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("เข้าสู่ระบบล้มเหลว กรุณาลองใหม่")),
+      Fluttertoast.showToast(
+        msg: "เข้าสู่ระบบล้มเหลว กรุณาลองใหม่",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
       return;
     }
 
     if (!mounted) return;
-    log("สมัครสมาชิกสำเร็จ: ${user.email}");
+    Fluttertoast.showToast(
+      msg: "เข้าสู่ระบบสำเร็จ",
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
     goToMainHomeScreen(context);
   }
 }

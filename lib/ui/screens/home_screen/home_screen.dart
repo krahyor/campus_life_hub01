@@ -37,7 +37,6 @@ class HomeScreen extends StatelessWidget {
                     ),
               ),
             ),
-            // Dots indicator (mock)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
