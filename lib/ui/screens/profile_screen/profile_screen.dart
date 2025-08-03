@@ -106,55 +106,117 @@ class _ProfileScreenState extends State<ProfileScreen> {
             );
           }
           return Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 5),
-                const CircleAvatar(
-                  radius: 100,
-                  backgroundImage: AssetImage('assets/profile_picture.png'),
+            child: Card(
+              elevation: 4,
+              margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 32,
                 ),
-                const SizedBox(height: 20),
-                Text(
-                  'ชื่อผู้ใช้: ${user['first_name']} ${user['last_name']}',
-                  style: const TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'อีเมล: ${user['email']}',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                Text('ปีการศึกษา: ${user['year']}'),
-                Text('คณะ: ${user['faculty']}'),
-                Text('อายุ: ${user['age']}'),
-                Text('เทอม: ${user['group']}'),
-                const SizedBox(height: 20),
-                ElevatedButton.icon(
-                  onPressed: () async {
-                    await AuthService().signout();
-                    if (!mounted) return; // เช็ก mounted ก่อนใช้ context
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (_) => const LoginScreen()),
-                      (route) => false,
-                    );
-                  },
-                  icon: const Icon(Icons.logout),
-                  label: const Text("Logout"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const CircleAvatar(
+                      radius: 60,
+                      backgroundImage: AssetImage('assets/profile_picture.png'),
                     ),
-                    textStyle: const TextStyle(fontSize: 16),
-                  ),
+                    const SizedBox(height: 20),
+                    Text(
+                      '${user['first_name']} ${user['last_name']}',
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.email,
+                          color: Colors.blueGrey,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          user['email'],
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.blueGrey,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Divider(height: 32, thickness: 1.2),
+                    _profileInfoRow(
+                      Icons.school,
+                      'ปีการศึกษา',
+                      user['year'].toString(),
+                    ),
+                    const SizedBox(height: 10),
+                    _profileInfoRow(
+                      Icons.account_balance,
+                      'คณะ',
+                      user['faculty'],
+                    ),
+                    const SizedBox(height: 10),
+                    _profileInfoRow(Icons.cake, 'อายุ', user['age'].toString()),
+                    const SizedBox(height: 10),
+                    _profileInfoRow(
+                      Icons.group,
+                      'เทอม',
+                      user['group'].toString(),
+                    ),
+                    const SizedBox(height: 28),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        await AuthService().signout();
+                        if (!mounted) return;
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (_) => const LoginScreen(),
+                          ),
+                          (route) => false,
+                        );
+                      },
+                      icon: const Icon(Icons.logout),
+                      label: const Text("Logout"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 32,
+                          vertical: 14,
+                        ),
+                        textStyle: const TextStyle(fontSize: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           );
         },
       ),
+    );
+  }
+
+  Widget _profileInfoRow(IconData icon, String label, String value) {
+    return Row(
+      children: [
+        Icon(icon, color: Colors.blueGrey, size: 20),
+        const SizedBox(width: 10),
+        Text('$label:', style: const TextStyle(fontWeight: FontWeight.w600)),
+        const SizedBox(width: 8),
+        Expanded(child: Text(value, style: const TextStyle(fontSize: 15))),
+      ],
     );
   }
 }
