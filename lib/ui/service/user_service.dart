@@ -1,17 +1,10 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import '../../models/account.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserService {
-  final _dbRef =
-      FirebaseDatabase.instanceFor(
-        app: Firebase.app(),
-        databaseURL: dotenv.env['FIREBASE_DB_URL'],
-      ).ref();
-
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
   Future<void> saveUser(String uid, User userModel) async {
-    await _dbRef.child('users/$uid').set({
+    await users.doc(uid).set({
       'email': userModel.email,
       'first_name': userModel.firstName,
       'last_name': userModel.lastName,
@@ -21,6 +14,10 @@ class UserService {
       'faculty':
           userModel.faculty == Faculty.computerEngineering
               ? 'วิศวกรรมคอมพิวเตอร์'
+              : userModel.faculty == Faculty.electricalEngineering
+              ? 'วิศวกรรมไฟฟ้า'
+              : userModel.faculty == Faculty.business
+              ? 'บริหารธุรกิจ'
               : 'อื่นๆ',
     });
   }
