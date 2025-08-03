@@ -100,7 +100,16 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Text('view all', style: TextStyle(color: Colors.blue)),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to events page
+                      Navigator.pushNamed(context, '/events');
+                    },
+                    child: const Text(
+                      'view all',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -110,7 +119,7 @@ class HomeScreen extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: 5,
-                separatorBuilder: (_, __) => const SizedBox(width: 12),
+                separatorBuilder: (context, index) => const SizedBox(width: 12),
                 itemBuilder:
                     (context, index) => Container(
                       width: 200,
@@ -150,7 +159,16 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Text('view all', style: TextStyle(color: Colors.blue)),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to events page
+                      Navigator.pushNamed(context, '/events');
+                    },
+                    child: const Text(
+                      'view all',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -160,7 +178,7 @@ class HomeScreen extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: 5,
-                separatorBuilder: (_, __) => const SizedBox(width: 12),
+                separatorBuilder: (context, index) => const SizedBox(width: 12),
                 itemBuilder:
                     (context, index) => Container(
                       width: 200,
@@ -193,11 +211,34 @@ class HomeScreen extends StatelessWidget {
                 crossAxisSpacing: 12,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: [
-                  _buildToolButton(Icons.school, 'Exam Info'),
-                  _buildToolButton(Icons.computer, 'Simulation'),
-                  _buildToolButton(Icons.group, 'Group'),
-                  _buildToolButton(Icons.map, 'Map'),
-                  // เพิ่มปุ่มอื่น ๆ ได้ตามต้องการ
+                  _buildToolButton(
+                    Icons.school,
+                    'ค้นหาวิชา',
+                    onTap: () {
+                      Navigator.pushNamed(context, '/exampleInfo');
+                    },
+                  ),
+                  _buildToolButton(
+                    Icons.computer,
+                    'ลงทะเบียน',
+                    onTap: () {
+                      Navigator.pushNamed(context, '/subject');
+                    },
+                  ),
+                  _buildToolButton(
+                    Icons.group,
+                    'Group',
+                    onTap: () {
+                      Navigator.pushNamed(context, '/group');
+                    },
+                  ),
+                  _buildToolButton(
+                    Icons.map,
+                    'Map',
+                    onTap: () {
+                      Navigator.pushNamed(context, '/map');
+                    },
+                  ),
                 ],
               ),
             ),
@@ -207,22 +248,25 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildToolButton(IconData icon, String label) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFF113F67),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: Colors.white, size: 32),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: const TextStyle(color: Colors.white, fontSize: 12),
-          ),
-        ],
+  Widget _buildToolButton(IconData icon, String label, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF113F67),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: Colors.white, size: 32),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: const TextStyle(color: Colors.white, fontSize: 12),
+            ),
+          ],
+        ),
       ),
     );
   }
