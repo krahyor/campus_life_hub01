@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:campusapp/core/routes.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventsScreen extends StatefulWidget {
   const EventsScreen({super.key});
@@ -47,7 +48,7 @@ class _EventsScreenState extends State<EventsScreen> {
     if (picked != null) {
       setState(() {
         selectedDateRange = picked;
-        currentPage = 0; // รีเซ็ตหน้าเมื่อเลือกวันที่ใหม่
+        currentPage = 0;
       });
     }
   }
@@ -87,9 +88,8 @@ class _EventsScreenState extends State<EventsScreen> {
                     );
               }).toList();
         }
-        final totalPages = (events.length / itemsPerPage).ceil();
 
-        // Slice events for current page
+        final totalPages = (events.length / itemsPerPage).ceil();
         final startIndex = currentPage * itemsPerPage;
         final endIndex = (startIndex + itemsPerPage).clamp(0, events.length);
         final pageEvents = events.sublist(startIndex, endIndex);
@@ -99,23 +99,17 @@ class _EventsScreenState extends State<EventsScreen> {
             title: const Text('กิจกรรม'),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRoutes.home, // ไปหน้า Home
-                );
-              },
+              onPressed: () => Navigator.pushNamed(context, AppRoutes.home),
             ),
           ),
           body: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(8.w),
                 child: Column(
                   children: [
-                    // Row 1: ปุ่มเลือกช่วงวันที่ อยู่ตรงกลาง
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding: EdgeInsets.symmetric(vertical: 8.h),
                       child: Row(
                         children: [
                           const Spacer(flex: 2),
@@ -125,7 +119,10 @@ class _EventsScreenState extends State<EventsScreen> {
                               child: ElevatedButton.icon(
                                 onPressed: _selectDateRange,
                                 icon: const Icon(Icons.date_range),
-                                label: const Text("เลือกช่วงวันที่"),
+                                label: Text(
+                                  "เลือกช่วงวันที่",
+                                  style: TextStyle(fontSize: 14.sp),
+                                ),
                               ),
                             ),
                           ),
@@ -133,11 +130,9 @@ class _EventsScreenState extends State<EventsScreen> {
                         ],
                       ),
                     ),
-
-                    // Row 2: ข้อความชิดซ้าย ปุ่มล้างชิดขวา
                     if (selectedDateRange != null)
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
+                        padding: EdgeInsets.only(bottom: 8.h),
                         child: Row(
                           children: [
                             Expanded(
@@ -145,6 +140,7 @@ class _EventsScreenState extends State<EventsScreen> {
                               child: Text(
                                 "แสดงกิจกรรมระหว่าง\n${selectedDateRange!.start.toLocal().toString().split(' ')[0]} ถึง ${selectedDateRange!.end.toLocal().toString().split(' ')[0]}",
                                 textAlign: TextAlign.left,
+                                style: TextStyle(fontSize: 12.sp),
                               ),
                             ),
                             const Spacer(flex: 2),
@@ -159,7 +155,10 @@ class _EventsScreenState extends State<EventsScreen> {
                                       currentPage = 0;
                                     });
                                   },
-                                  child: const Text("ล้างช่วงวันที่"),
+                                  child: Text(
+                                    "ล้างช่วงวันที่",
+                                    style: TextStyle(fontSize: 12.sp),
+                                  ),
                                 ),
                               ),
                             ),
@@ -171,52 +170,58 @@ class _EventsScreenState extends State<EventsScreen> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.w),
                   child: GridView.builder(
                     itemCount: pageEvents.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 8,
-                          crossAxisSpacing: 8,
-                          childAspectRatio: 3 / 4,
-                        ),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 8.h,
+                      crossAxisSpacing: 8.w,
+                      childAspectRatio: 3 / 4,
+                    ),
                     itemBuilder: (context, index) {
                       final event = pageEvents[index];
                       return Card(
                         elevation: 3,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12.r),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(12),
+                          padding: EdgeInsets.all(12.w),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.event,
-                                size: 36,
+                                size: 36.sp,
                                 color: Colors.blue,
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8.h),
                               Text(
                                 event["name"] ?? "ไม่มีชื่อกิจกรรม",
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                  fontSize: 16.sp,
                                 ),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8.h),
                               Text(
                                 event["description"] ?? "ไม่มีรายละเอียด",
+                                style: TextStyle(fontSize: 12.sp),
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               const Spacer(),
-                              Text("เริ่ม: ${event["start_date"] ?? "-"}"),
-                              Text("สิ้นสุด: ${event["end_date"] ?? "-"}"),
+                              Text(
+                                "เริ่ม: ${event["start_date"] ?? "-"}",
+                                style: TextStyle(fontSize: 12.sp),
+                              ),
+                              Text(
+                                "สิ้นสุด: ${event["end_date"] ?? "-"}",
+                                style: TextStyle(fontSize: 12.sp),
+                              ),
                             ],
                           ),
                         ),
@@ -226,7 +231,7 @@ class _EventsScreenState extends State<EventsScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                padding: EdgeInsets.symmetric(vertical: 8.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -235,17 +240,23 @@ class _EventsScreenState extends State<EventsScreen> {
                           currentPage > 0
                               ? () => setState(() => currentPage--)
                               : null,
-                      child: const Text("< ก่อนหน้า"),
+                      child: Text(
+                        "< ก่อนหน้า",
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
                     ),
-                    const SizedBox(width: 16),
-                    Text("หน้า ${currentPage + 1} / $totalPages"),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16.w),
+                    Text(
+                      "หน้า ${currentPage + 1} / $totalPages",
+                      style: TextStyle(fontSize: 14.sp),
+                    ),
+                    SizedBox(width: 16.w),
                     ElevatedButton(
                       onPressed:
                           currentPage < totalPages - 1
                               ? () => setState(() => currentPage++)
                               : null,
-                      child: const Text("ถัดไป >"),
+                      child: Text("ถัดไป >", style: TextStyle(fontSize: 14.sp)),
                     ),
                   ],
                 ),
