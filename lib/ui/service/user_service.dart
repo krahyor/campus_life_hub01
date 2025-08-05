@@ -11,6 +11,7 @@ class UserService {
       'year': userModel.year.index + 1,
       'group': userModel.group,
       'age': userModel.age,
+      'role': 'user',
       'faculty':
           userModel.faculty == Faculty.computerEngineering
               ? 'วิศวกรรมคอมพิวเตอร์'

@@ -11,6 +11,7 @@ class User {
   final String group;
   final int age;
   final Faculty faculty;
+  final String role = "user";
 
   User({
     required this.email,
