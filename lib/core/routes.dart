@@ -9,6 +9,7 @@ import 'package:campusapp/ui/screens/group_screen/group_screen.dart';
 import 'package:campusapp/ui/screens/example_info_screen/example_info_screen.dart';
 import 'package:campusapp/ui/screens/simulation_screen/simulation_screen.dart';
 import 'package:campusapp/ui/screens/subject_screen/subject_screen.dart';
+import 'package:campusapp/ui/screens/annoucement_screen/announcements_screen.dart';
 
 class AppRoutes {
   static const String home = '/home';
@@ -21,6 +22,7 @@ class AppRoutes {
   static const String exampleInfo = '/exampleInfo';
   static const String simulation = '/simulation';
   static const String subject = '/subject';
+  static const String announcements = '/announcements';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -44,6 +46,8 @@ class AppRoutes {
         return _buildSlideRoute(const SimulationScreen(), settings);
       case subject:
         return _buildSlideRoute(const SubjectScreen(), settings);
+      case announcements:
+        return _buildSlideRoute(const AnnouncementScreen(), settings);
       default:
         return _buildSlideRoute(const MainHomeScreen(), settings);
     }
