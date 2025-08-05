@@ -19,19 +19,24 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // ตั้ง Timer ให้ Banner เลื่อนอัตโนมัติ
+    _startAutoSlide();
+  }
+
+  void _startAutoSlide() {
     _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       if (_currentPage < bannerCount - 1) {
         _currentPage++;
       } else {
         _currentPage = 0;
       }
-      _pageController.animateToPage(
-        _currentPage,
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.easeInOut,
-      );
-      setState(() {});
+      if (mounted) {
+        _pageController.animateToPage(
+          _currentPage,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
+        );
+        setState(() {});
+      }
     });
   }
 
@@ -67,6 +72,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     setState(() {
                       _currentPage = index;
                     });
+
+                    // ✅ รีเซ็ต timer เมื่อเลื่อนด้วยมือ
+                    _timer?.cancel();
+                    _startAutoSlide();
                   },
                   itemBuilder:
                       (context, index) => Container(
