@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:campusapp/core/routes.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
@@ -45,6 +46,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       appBar: AppBar(
         title: const Text('ตารางเรียน'),
         backgroundColor: const Color(0xFF113F67),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamed(context, AppRoutes.home);
+          },
+        ),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: futureSchedule,
