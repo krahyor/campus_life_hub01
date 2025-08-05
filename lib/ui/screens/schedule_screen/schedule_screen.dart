@@ -1,7 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:campusapp/core/routes.dart';
+import 'package:campusapp/ui/widgets/base/day_selector.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
@@ -45,6 +47,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       appBar: AppBar(
         title: const Text('ตารางเรียน'),
         backgroundColor: const Color(0xFF113F67),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamed(context, AppRoutes.home);
+          },
+        ),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: futureSchedule,
@@ -71,35 +79,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
           return Column(
             children: [
-              Padding(
-                padding: EdgeInsets.all(12.w),
-                child: DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: "เลือกวัน",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 12.w,
-                      vertical: 8.h,
-                    ),
-                  ),
-                  value: selectedDay,
-                  onChanged: (value) {
-                    if (value != null) {
-                      setState(() {
-                        selectedDay = value;
-                      });
-                    }
-                  },
-                  items:
-                      days
-                          .map(
-                            (day) =>
-                                DropdownMenuItem(value: day, child: Text(day)),
-                          )
-                          .toList(),
-                ),
+              // ✅ ใช้ Widget ใหม่แทน
+              DaySelector(
+                selectedDay: selectedDay,
+                days: days,
+                onChanged: (value) {
+                  setState(() {
+                    selectedDay = value;
+                  });
+                },
               ),
               Expanded(
                 child: Padding(
