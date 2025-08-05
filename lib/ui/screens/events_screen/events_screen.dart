@@ -17,6 +17,11 @@ class _EventsScreenState extends State<EventsScreen> {
   final int itemsPerPage = 4;
   DateTimeRange? selectedDateRange;
 
+  String _truncateText(String text, {int maxLength = 50}) {
+    if (text.length <= maxLength) return text;
+    return '${text.substring(0, maxLength)}...';
+  }
+
   @override
   void initState() {
     super.initState();
@@ -208,7 +213,9 @@ class _EventsScreenState extends State<EventsScreen> {
                               ),
                               SizedBox(height: 8.h),
                               Text(
-                                event["description"] ?? "ไม่มีรายละเอียด",
+                                _truncateText(
+                                  event["description"] ?? "ไม่มีรายละเอียด",
+                                ),
                                 style: TextStyle(fontSize: 12.sp),
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
