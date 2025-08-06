@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:campusapp/models/announcement.dart';
+import 'package:campusapp/ui/service/announcement_service.dart';
+import 'package:campusapp/models/event.dart';
+import 'package:campusapp/ui/service/event_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,13 +17,19 @@ class _HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   Timer? _timer;
-
   final int bannerCount = 3;
+
+  late Future<List<Announcement>> _announcementFuture;
+  late Future<List<Event>> _eventFuture;
 
   @override
   void initState() {
     super.initState();
     _startAutoSlide();
+
+    // ✅ Initialize futures only once
+    _announcementFuture = AnnouncementService.fetchLatest();
+    _eventFuture = EventService.fetchLatest();
   }
 
   void _startAutoSlide() {
@@ -29,13 +39,14 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         _currentPage = 0;
       }
+
       if (mounted) {
         _pageController.animateToPage(
           _currentPage,
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeInOut,
         );
-        setState(() {});
+        setState(() {}); // only for dot indicator
       }
     });
   }
@@ -60,22 +71,17 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ✅ Banner
+              // Banner Section
               SizedBox(
                 height: 180.h,
                 child: PageView.builder(
                   controller: _pageController,
                   itemCount: bannerCount,
                   onPageChanged: (index) {
-                    setState(() {
-                      _currentPage = index;
-                    });
-
-                    // ✅ รีเซ็ต timer เมื่อเลื่อนด้วยมือ
+                    setState(() => _currentPage = index);
                     _timer?.cancel();
-                    _startAutoSlide();
+                    _startAutoSlide(); // restart timer
                   },
                   itemBuilder:
                       (context, index) => Container(
@@ -94,8 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                 ),
               ),
-
-              // ✅ Dot indicator
+              // Dots
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
@@ -115,151 +120,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              // What's new - Announcements
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          "What's new",
-                          style: TextStyle(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(width: 8.w),
-                        Text(
-                          'Announcements',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, '/events'),
-                      child: Text(
-                        'view all',
-                        style: TextStyle(color: Colors.blue, fontSize: 14.sp),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
 
-              SizedBox(
-                height: 110.h,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  itemCount: 5,
-                  separatorBuilder: (context, index) => SizedBox(width: 12.w),
-                  itemBuilder:
-                      (context, index) => Container(
-                        width: 200.w,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12.r),
-                          boxShadow: [
-                            BoxShadow(color: Colors.black12, blurRadius: 4.r),
-                          ],
-                        ),
-                        child: Center(
-                          child: Text(
-                            'ข่าว/ประกาศ $index',
-                            style: TextStyle(fontSize: 14.sp),
-                          ),
-                        ),
-                      ),
-                ),
-              ),
+              // Announcements Section
+              _buildSectionHeader("Announcements", '/announcements'),
+              _buildAnnouncementList(),
 
-              // What's new - Events
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          "What's new",
-                          style: TextStyle(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(width: 8.w),
-                        Text(
-                          'Events',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, '/events'),
-                      child: Text(
-                        'view all',
-                        style: TextStyle(color: Colors.blue, fontSize: 14.sp),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              SizedBox(
-                height: 110.h,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  itemCount: 5,
-                  separatorBuilder: (context, index) => SizedBox(width: 12.w),
-                  itemBuilder:
-                      (context, index) => Container(
-                        width: 200.w,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12.r),
-                          boxShadow: [
-                            BoxShadow(color: Colors.black12, blurRadius: 4.r),
-                          ],
-                        ),
-                        child: Center(
-                          child: Text(
-                            'กิจกรรม $index',
-                            style: TextStyle(fontSize: 14.sp),
-                          ),
-                        ),
-                      ),
-                ),
-              ),
+              // Events Section
+              _buildSectionHeader("Events", '/events'),
+              _buildEventList(),
 
               // Tools Section
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                child: Text(
-                  'Tools',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Tools',
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
-
               GridView.count(
                 crossAxisCount: 4,
-                shrinkWrap: true, // ✅ ให้ GridView ขยายตามเนื้อหา
-                physics:
-                    const NeverScrollableScrollPhysics(), // ✅ ปิด scroll ของ grid
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 mainAxisSpacing: 12.h,
                 crossAxisSpacing: 12.w,
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -293,6 +180,149 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Section Header
+  Widget _buildSectionHeader(String title, String route) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Text(
+                "What's new",
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(width: 8.w),
+              Text(
+                title,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          GestureDetector(
+            onTap: () => Navigator.pushNamed(context, route),
+            child: Text(
+              'view all',
+              style: TextStyle(color: Colors.blue, fontSize: 14.sp),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Announcements list
+  Widget _buildAnnouncementList() {
+    return SizedBox(
+      height: 110.h,
+      child: FutureBuilder<List<Announcement>>(
+        future: _announcementFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError ||
+              !snapshot.hasData ||
+              snapshot.data!.isEmpty) {
+            return Center(
+              child: Text('ไม่มีประกาศ', style: TextStyle(fontSize: 14.sp)),
+            );
+          }
+
+          final data = snapshot.data!;
+          return ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            itemCount: data.length,
+            separatorBuilder: (_, __) => SizedBox(width: 12.w),
+            itemBuilder: (context, index) {
+              final item = data[index];
+              return _buildCard(item.title, item.description, item.date);
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  // Events list
+  Widget _buildEventList() {
+    return SizedBox(
+      height: 110.h,
+      child: FutureBuilder<List<Event>>(
+        future: _eventFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError ||
+              !snapshot.hasData ||
+              snapshot.data!.isEmpty) {
+            return Center(
+              child: Text('ไม่มีกิจกรรม', style: TextStyle(fontSize: 14.sp)),
+            );
+          }
+
+          final data = snapshot.data!;
+          return ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            itemCount: data.length,
+            separatorBuilder: (_, __) => SizedBox(width: 12.w),
+            itemBuilder: (context, index) {
+              final item = data[index];
+              return _buildCard(item.name, item.description, item.startDate);
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  // Shared card widget
+  Widget _buildCard(String title, String description, DateTime? date) {
+    return Container(
+      width: 200.w,
+      padding: EdgeInsets.all(12.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.r),
+        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4.r)],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            description,
+            style: TextStyle(fontSize: 12.sp),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const Spacer(),
+          Text(
+            date != null ? '${date.day}/${date.month}/${date.year}' : '',
+            style: TextStyle(fontSize: 10.sp, color: Colors.grey),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Tool button
   Widget _buildToolButton(IconData icon, String label, {VoidCallback? onTap}) {
     return GestureDetector(
       onTap: onTap,
