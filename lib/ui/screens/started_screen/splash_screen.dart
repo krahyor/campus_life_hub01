@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'on_boarding_screen.dart';
-import '../main_screen/main_screen.dart';
+import 'package:campusapp/core/routes.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,17 +25,11 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 3));
 
     if (mounted) {
-      if (seenOnboarding) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MainHomeScreen()),
-        );
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const OnboardingScreen()),
-        );
-      }
+      // if (seenOnboarding) {
+      //   Navigator.pushNamed(context, AppRoutes.home);
+      // } else {
+      Navigator.pushNamed(context, AppRoutes.onboarding);
+      // }
     }
   }
 
