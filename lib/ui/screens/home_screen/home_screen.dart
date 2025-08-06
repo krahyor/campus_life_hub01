@@ -219,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Announcements list
   Widget _buildAnnouncementList() {
     return SizedBox(
-      height: 110.h,
+      height: 130.h,
       child: FutureBuilder<List<Announcement>>(
         future: _announcementFuture,
         builder: (context, snapshot) {
@@ -254,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Events list
   Widget _buildEventList() {
     return SizedBox(
-      height: 110.h,
+      height: 130.h,
       child: FutureBuilder<List<Event>>(
         future: _eventFuture,
         builder: (context, snapshot) {
