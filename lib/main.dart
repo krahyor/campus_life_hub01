@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             onGenerateRoute: AppRoutes.onGenerateRoute,
-            initialRoute: AppRoutes.home,
+            initialRoute: AppRoutes.splash,
             title: 'Flutter Onboarding Example',
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(
