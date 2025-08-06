@@ -1,8 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:campusapp/core/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../providers/events_provider.dart';
+import '../../widgets/event_card.dart';
+import '../../widgets/date_range_selector.dart';
 
 class EventsScreen extends StatefulWidget {
   const EventsScreen({super.key});
@@ -12,9 +13,10 @@ class EventsScreen extends StatefulWidget {
 }
 
 class _EventsScreenState extends State<EventsScreen> {
+  final EventsProvider _eventsProvider = EventsProvider();
   late Future<List<Map<String, dynamic>>> futureEvents;
   int currentPage = 0;
-  final int itemsPerPage = 4;
+  final int itemsPerPage = 6;
   DateTimeRange? selectedDateRange;
 
   String _truncateText(String text, {int maxLength = 50}) {
@@ -25,15 +27,7 @@ class _EventsScreenState extends State<EventsScreen> {
   @override
   void initState() {
     super.initState();
-    futureEvents = loadEventsFromJson();
-  }
-
-  Future<List<Map<String, dynamic>>> loadEventsFromJson() async {
-    final String jsonString = await rootBundle.loadString(
-      'assets/mock_events/mock_events.json',
-    );
-    final List<dynamic> jsonData = json.decode(jsonString);
-    return jsonData.cast<Map<String, dynamic>>();
+    futureEvents = _eventsProvider.fetchEvents();
   }
 
   Future<void> _selectDateRange() async {
@@ -64,19 +58,26 @@ class _EventsScreenState extends State<EventsScreen> {
       future: futureEvents,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
         }
 
         if (snapshot.hasError) {
-          return Center(child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'));
+          return Scaffold(
+            body: Center(child: Text('เกิดข้อผิดพลาด: ${snapshot.error}')),
+          );
         }
 
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text("ไม่พบข้อมูลกิจกรรม"));
+          return const Scaffold(
+            body: Center(child: Text("ไม่พบข้อมูลกิจกรรม")),
+          );
         }
 
         List<Map<String, dynamic>> events = snapshot.data!;
 
+        // Filter events by date range if selected
         if (selectedDateRange != null) {
           events =
               events.where((event) {
@@ -102,6 +103,7 @@ class _EventsScreenState extends State<EventsScreen> {
         return Scaffold(
           appBar: AppBar(
             title: const Text('กิจกรรม'),
+            backgroundColor: const Color(0xFF113F67),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () => Navigator.pushNamed(context, AppRoutes.home),
@@ -109,70 +111,18 @@ class _EventsScreenState extends State<EventsScreen> {
           ),
           body: Column(
             children: [
-              Padding(
-                padding: EdgeInsets.all(8.w),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.h),
-                      child: Row(
-                        children: [
-                          const Spacer(flex: 2),
-                          Expanded(
-                            flex: 6,
-                            child: Center(
-                              child: ElevatedButton.icon(
-                                onPressed: _selectDateRange,
-                                icon: const Icon(Icons.date_range),
-                                label: Text(
-                                  "เลือกช่วงวันที่",
-                                  style: TextStyle(fontSize: 14.sp),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const Spacer(flex: 2),
-                        ],
-                      ),
-                    ),
-                    if (selectedDateRange != null)
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 8.h),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 6,
-                              child: Text(
-                                "แสดงกิจกรรมระหว่าง\n${selectedDateRange!.start.toLocal().toString().split(' ')[0]} ถึง ${selectedDateRange!.end.toLocal().toString().split(' ')[0]}",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(fontSize: 12.sp),
-                              ),
-                            ),
-                            const Spacer(flex: 2),
-                            Expanded(
-                              flex: 4,
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: OutlinedButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      selectedDateRange = null;
-                                      currentPage = 0;
-                                    });
-                                  },
-                                  child: Text(
-                                    "ล้างช่วงวันที่",
-                                    style: TextStyle(fontSize: 12.sp),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                  ],
-                ),
+              // Date Range Selector
+              DateRangeSelector(
+                selectedDateRange: selectedDateRange,
+                onSelectDateRange: _selectDateRange,
+                onClearDateRange: () {
+                  setState(() {
+                    selectedDateRange = null;
+                    currentPage = 0;
+                  });
+                },
               ),
+              // Events Grid
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.all(8.w),
@@ -182,61 +132,16 @@ class _EventsScreenState extends State<EventsScreen> {
                       crossAxisCount: 2,
                       mainAxisSpacing: 8.h,
                       crossAxisSpacing: 8.w,
-                      childAspectRatio: 3 / 4,
+                      childAspectRatio: 3 / 4.5,
                     ),
                     itemBuilder: (context, index) {
                       final event = pageEvents[index];
-                      return Card(
-                        elevation: 3,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(12.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.event,
-                                size: 36.sp,
-                                color: Colors.blue,
-                              ),
-                              SizedBox(height: 8.h),
-                              Text(
-                                event["name"] ?? "ไม่มีชื่อกิจกรรม",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.sp,
-                                ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(height: 8.h),
-                              Text(
-                                _truncateText(
-                                  event["description"] ?? "ไม่มีรายละเอียด",
-                                ),
-                                style: TextStyle(fontSize: 12.sp),
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const Spacer(),
-                              Text(
-                                "เริ่ม: ${event["start_date"] ?? "-"}",
-                                style: TextStyle(fontSize: 12.sp),
-                              ),
-                              Text(
-                                "สิ้นสุด: ${event["end_date"] ?? "-"}",
-                                style: TextStyle(fontSize: 12.sp),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+                      return EventCard(event: event);
                     },
                   ),
                 ),
               ),
+              // Pagination
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.h),
                 child: Row(
