@@ -9,7 +9,8 @@ import 'package:campusapp/ui/screens/group_screen/group_screen.dart';
 import 'package:campusapp/ui/screens/example_info_screen/example_info_screen.dart';
 import 'package:campusapp/ui/screens/simulation_screen/simulation_screen.dart';
 import 'package:campusapp/ui/screens/subject_screen/subject_screen.dart';
-import 'package:campusapp/ui/screens/annoucement_screen/announcements_screen.dart';
+import 'package:campusapp/ui/screens/started_screen/splash_screen.dart';
+import 'package:campusapp/ui/screens/started_screen/on_boarding_screen.dart';
 
 class AppRoutes {
   static const String home = '/home';
@@ -22,7 +23,8 @@ class AppRoutes {
   static const String exampleInfo = '/exampleInfo';
   static const String simulation = '/simulation';
   static const String subject = '/subject';
-  static const String announcements = '/announcements';
+  static const String splash = '/splash';
+  static const String onboarding = '/onboarding';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -46,10 +48,10 @@ class AppRoutes {
         return _buildSlideRoute(const SimulationScreen(), settings);
       case subject:
         return _buildSlideRoute(const SubjectScreen(), settings);
-      case announcements:
-        return _buildSlideRoute(const AnnouncementScreen(), settings);
+      case onboarding:
+        return _buildSlideRoute(const OnboardingScreen(), settings);
       default:
-        return _buildSlideRoute(const MainHomeScreen(), settings);
+        return _buildSlideRoute(const SplashScreen(), settings);
     }
   }
 
