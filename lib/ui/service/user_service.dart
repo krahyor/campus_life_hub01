@@ -12,14 +12,7 @@ class UserService {
       'group': userModel.group,
       'age': userModel.age,
       'role': 'user',
-      'faculty':
-          userModel.faculty == Faculty.computerEngineering
-              ? 'วิศวกรรมคอมพิวเตอร์'
-              : userModel.faculty == Faculty.electricalEngineering
-              ? 'วิศวกรรมไฟฟ้า'
-              : userModel.faculty == Faculty.business
-              ? 'บริหารธุรกิจ'
-              : 'อื่นๆ',
+      'faculty': userModel.faculty.title,
     });
   }
 }

@@ -1,6 +1,37 @@
 enum Year { year1, year2, year3, year4 }
 
-enum Faculty { computerEngineering, electricalEngineering, business, other }
+enum Faculty {
+  computerEngineering(title: "วิศวกรรมคอมพิวเตอร์"),
+  electricalEngineering(title: "วิศวกรรมไฟฟ้า"),
+  mechanicalEngineering(title: "วิศวกรรมเครื่องกล"),
+  civilEngineering(title: "วิศวกรรมโยธา"),
+  chemicalEngineering(title: "วิศวกรรมเคมี"),
+  computerScience(title: "วิทยาการคอมพิวเตอร์"),
+  informationTechnology(title: "เทคโนโลยีสารสนเทศ"),
+  architecture(title: "สถาปัตยกรรม"),
+  business(title: "บริหารธุรกิจ"),
+  economics(title: "เศรษฐศาสตร์"),
+  law(title: "นิติศาสตร์"),
+  medicine(title: "แพทยศาสตร์"),
+  nursing(title: "พยาบาลศาสตร์"),
+  pharmacy(title: "เภสัชศาสตร์"),
+  publicHealth(title: "สาธารณสุขศาสตร์"),
+  science(title: "วิทยาศาสตร์"),
+  education(title: "ครุศาสตร์/ศึกษาศาสตร์"),
+  humanities(title: "มนุษยศาสตร์"),
+  socialSciences(title: "สังคมศาสตร์"),
+  agriculture(title: "เกษตรศาสตร์"),
+  fisheries(title: "ประมง"),
+  forestry(title: "วนศาสตร์"),
+  politicalScience(title: "รัฐศาสตร์"),
+  fineArts(title: "ศิลปกรรมศาสตร์"),
+  music(title: "ดุริยางคศิลป์"),
+  sportsScience(title: "วิทยาศาสตร์การกีฬา"),
+  other(title: "อื่นๆ");
+
+  const Faculty({required this.title});
+  final String title;
+}
 
 class User {
   final String email;
@@ -35,20 +66,5 @@ class User {
       age: json['age'],
       faculty: json['faculty'],
     );
-  }
-}
-
-extension FacultyDisplay on Faculty {
-  String get displayName {
-    switch (this) {
-      case Faculty.computerEngineering:
-        return 'วิศวกรรมคอมพิวเตอร์';
-      case Faculty.electricalEngineering:
-        return 'วิศวกรรมไฟฟ้า';
-      case Faculty.business:
-        return 'บริหารธุรกิจ';
-      case Faculty.other:
-        return 'อื่นๆ';
-    }
   }
 }

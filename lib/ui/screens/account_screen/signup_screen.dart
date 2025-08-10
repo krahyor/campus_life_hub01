@@ -185,7 +185,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             Faculty.values.map((faculty) {
                               return DropdownMenuItem(
                                 value: faculty,
-                                child: Text(faculty.displayName),
+                                child: Text(faculty.title),
                               );
                             }).toList(),
                         onChanged: (value) {
