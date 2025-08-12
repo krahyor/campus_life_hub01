@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:campusapp/ui/screens/main_screen/main_screen.dart';
+import 'package:campusapp/ui/screens/annoucement_screen/announcements_screen.dart';
 import 'package:campusapp/ui/screens/events_screen/events_screen.dart';
 import 'package:campusapp/ui/screens/profile_screen/profile_screen.dart';
 import 'package:campusapp/ui/screens/schedule_screen/schedule_screen.dart';
@@ -25,11 +26,14 @@ class AppRoutes {
   static const String subject = '/subject';
   static const String splash = '/splash';
   static const String onboarding = '/onboarding';
+  static const String announcements = '/announcements';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case home:
         return _buildSlideRoute(const MainHomeScreen(), settings);
+      case announcements:
+        return _buildSlideRoute(const AnnouncementScreen(), settings);
       case events:
         return _buildSlideRoute(const EventsScreen(), settings);
       case profile:

@@ -53,7 +53,6 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
-      // floatingActionButton: floatingActionButton,
     );
   }
 }

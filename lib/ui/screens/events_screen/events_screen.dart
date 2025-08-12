@@ -19,11 +19,6 @@ class _EventsScreenState extends State<EventsScreen> {
   final int itemsPerPage = 6;
   DateTimeRange? selectedDateRange;
 
-  String _truncateText(String text, {int maxLength = 50}) {
-    if (text.length <= maxLength) return text;
-    return '${text.substring(0, maxLength)}...';
-  }
-
   @override
   void initState() {
     super.initState();
