@@ -54,17 +54,4 @@ class User {
     required this.age,
     required this.faculty,
   });
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      email: json['email'],
-      password: json['password'],
-      firstName: json['first_name'],
-      lastName: json['last_name'],
-      year: Year.values[(json['year'] as int) - 1],
-      group: json['group'],
-      age: json['age'],
-      faculty: json['faculty'],
-    );
-  }
 }
