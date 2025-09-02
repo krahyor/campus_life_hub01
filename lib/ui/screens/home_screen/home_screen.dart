@@ -17,7 +17,14 @@ class _HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   Timer? _timer;
-  final int bannerCount = 3;
+  // Banner images (network)
+  final List<String> _bannerImages = [
+    'https://www.runlah.com/images/event/YYS2wHAG/bn_ir-th.webp',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYcyVIf5s3mzwc5FTldiF4a8bRi0aWCxu5kQ&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb43FQ6Cy2KUjD1PuJRjhS7j4u20sOAAK3ww&s',
+  ];
+
+  int get bannerCount => _bannerImages.length;
 
   late Future<List<Announcement>> _announcementFuture;
   late Future<List<Event>> _eventFuture;
@@ -83,21 +90,47 @@ class _HomeScreenState extends State<HomeScreen> {
                     _timer?.cancel();
                     _startAutoSlide(); // restart timer
                   },
-                  itemBuilder:
-                      (context, index) => Container(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 16.w,
-                          vertical: 8.h,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16.r),
-                          color: Colors.blue[200],
-                          image: DecorationImage(
-                            image: AssetImage('assets/banner_$index.jpg'),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                  itemBuilder: (context, index) {
+                    final imgUrl = _bannerImages[index];
+                    return Container(
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 8.h,
                       ),
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.r),
+                        color: Colors.blue[200],
+                      ),
+                      child: Image.network(
+                        imgUrl,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, progress) {
+                          if (progress == null) return child;
+                          final value =
+                              progress.expectedTotalBytes != null
+                                  ? progress.cumulativeBytesLoaded /
+                                      progress.expectedTotalBytes!
+                                  : null;
+                          return Center(
+                            child: SizedBox(
+                              width: 32.w,
+                              height: 32.w,
+                              child: CircularProgressIndicator(value: value),
+                            ),
+                          );
+                        },
+                        errorBuilder:
+                            (context, error, stack) => Center(
+                              child: Icon(
+                                Icons.broken_image,
+                                color: Colors.white,
+                                size: 40.sp,
+                              ),
+                            ),
+                      ),
+                    );
+                  },
                 ),
               ),
               // Dots
