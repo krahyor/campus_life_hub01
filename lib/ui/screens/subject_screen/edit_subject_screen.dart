@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../../providers/subject_provider.dart';
+import '../../providers/register_subjects_provider.dart';
+import '../account_screen/login_screen.dart';
+import '../../../core/routes.dart';
 
 class EditRegisteredSubjectScreen extends StatefulWidget {
   const EditRegisteredSubjectScreen({super.key});
@@ -11,19 +16,59 @@ class EditRegisteredSubjectScreen extends StatefulWidget {
 }
 
 class _EditRegisteredSubjectState extends State<EditRegisteredSubjectScreen> {
+  late final User? _firebaseUser;
+
   @override
   void initState() {
     super.initState();
-    Provider.of<SubjectProvider>(context, listen: false).loadSubjects();
+    _firebaseUser = FirebaseAuth.instance.currentUser;
+
+    // โหลดข้อมูลวิชาถ้า login แล้ว
+    if (_firebaseUser != null) {
+      Provider.of<SubjectProvider>(context, listen: false).loadSubjects();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<SubjectProvider>(context);
+    // ถ้ายังไม่ได้ login
+    if (_firebaseUser == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('แก้ไขการทะเบียนรายวิชา'),
+          backgroundColor: const Color(0xFF113F67),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pushNamed(context, AppRoutes.home),
+          ),
+        ),
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+              );
+            },
+            child: const Text("เข้าสู่ระบบ เพื่อแก้ไขการลงทะเบียนวิชา"),
+          ),
+        ),
+      );
+    }
+
+    final subjectProvider = Provider.of<SubjectProvider>(context);
+    final registeredProvider = Provider.of<RegisteredSubjectsProvider>(context);
+
+    final registeredSubjectIds =
+        registeredProvider.subjects
+            .map((s) => s['subject_id'] as String)
+            .toSet();
 
     final registeredSubjects =
-        provider.subjects
-            .where((subject) => provider.isRegistered(subject.subjectId))
+        subjectProvider.subjects
+            .where(
+              (subject) => registeredSubjectIds.contains(subject.subjectId),
+            )
             .toList();
 
     return Scaffold(
@@ -42,7 +87,6 @@ class _EditRegisteredSubjectState extends State<EditRegisteredSubjectScreen> {
                 itemCount: registeredSubjects.length,
                 itemBuilder: (context, index) {
                   final subject = registeredSubjects[index];
-
                   return Card(
                     margin: const EdgeInsets.symmetric(
                       horizontal: 16,
@@ -56,9 +100,15 @@ class _EditRegisteredSubjectState extends State<EditRegisteredSubjectScreen> {
                         'ห้อง: ${subject.room} หน่วยกิต: ${subject.credit}',
                       ),
                       trailing: ElevatedButton(
-                        onPressed: () {
-                          provider.unregisteredSubject(subject.subjectId);
-                          setState(() {}); // refresh UI
+                        onPressed: () async {
+                          await registeredProvider.unregisterSubject(
+                            subject.subjectId,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('ยกเลิกรายวิชาเรียบร้อย'),
+                            ),
+                          );
                         },
                         child: const Text('ยกเลิกรายวิชา'),
                       ),
