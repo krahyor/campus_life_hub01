@@ -1,20 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../../providers/subject_provider.dart';
+import '../../providers/register_subjects_provider.dart';
 import 'take_subject_screen.dart';
-import 'edit_subject_screen.dart'; // 👈 เพิ่ม import
+import 'edit_subject_screen.dart';
+import '../account_screen/login_screen.dart';
+import '../../../core/routes.dart';
 
 class SubjectScreen extends StatelessWidget {
   const SubjectScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<SubjectProvider>(context);
+    final firebaseUser = FirebaseAuth.instance.currentUser;
 
-    // รายวิชาที่ลงทะเบียนแล้ว
+    // ถ้ายังไม่ login → แสดงปุ่มเข้าสู่ระบบ
+    if (firebaseUser == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('วิชาที่ลงทะเบียนแล้ว'),
+          backgroundColor: const Color(0xFF113F67),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pushNamed(context, AppRoutes.home),
+          ),
+        ),
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+              );
+            },
+            child: const Text("เข้าสู่ระบบ เพื่อดูรายวิชาที่ลงทะเบียนแล้ว"),
+          ),
+        ),
+      );
+    }
+
+    // ถ้า login แล้ว → แสดงข้อมูลรายวิชาที่ลงทะเบียน
+    final subjectProvider = Provider.of<SubjectProvider>(context);
+    final registeredProvider = Provider.of<RegisteredSubjectsProvider>(context);
+
+    final registeredSubjectIds =
+        registeredProvider.subjects
+            .map((s) => s['subject_id'] as String)
+            .toSet();
+
     final registeredSubjects =
-        provider.subjects
-            .where((subject) => provider.isRegistered(subject.subjectId))
+        subjectProvider.subjects
+            .where(
+              (subject) => registeredSubjectIds.contains(subject.subjectId),
+            )
             .toList();
 
     return Scaffold(
@@ -35,8 +75,7 @@ class SubjectScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder:
-                              (context) =>
-                                  const EditRegisteredSubjectScreen(), // 👈 หน้าสำหรับแก้ไข
+                              (context) => const EditRegisteredSubjectScreen(),
                         ),
                       );
                     },
@@ -84,7 +123,6 @@ class SubjectScreen extends StatelessWidget {
                       itemCount: registeredSubjects.length,
                       itemBuilder: (context, index) {
                         final subject = registeredSubjects[index];
-
                         return Card(
                           margin: const EdgeInsets.symmetric(
                             horizontal: 16,
