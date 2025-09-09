@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'dart:convert';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:campusapp/core/routes.dart';
 import 'package:campusapp/ui/widgets/base/day_selector.dart';
+
+import '../../providers/register_subjects_provider.dart';
+import '../../providers/subject_provider.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
@@ -13,11 +16,9 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  late Future<List<Map<String, dynamic>>> futureSchedule;
   String selectedDay = 'จันทร์';
 
   final List<String> days = [
-    'ทั้งหมด',
     'จันทร์',
     'อังคาร',
     'พุธ',
@@ -28,21 +29,30 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-    futureSchedule = loadScheduleFromJson();
-  }
-
-  Future<List<Map<String, dynamic>>> loadScheduleFromJson() async {
-    final String jsonString = await rootBundle.loadString(
-      'assets/mock_schedule/schedule.json',
-    );
-    final List<dynamic> jsonData = json.decode(jsonString);
-    return jsonData.cast<Map<String, dynamic>>();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final registeredProvider = Provider.of<RegisteredSubjectsProvider>(context);
+    final subjectProvider = Provider.of<SubjectProvider>(context);
+
+    // ดึง subject_id ที่ user ลงทะเบียน
+    final registeredSubjectIds =
+        registeredProvider.subjects
+            .map((s) => s['subject_id'] as String)
+            .toSet();
+
+    // กรองรายวิชาจาก subjectProvider โดยเฉพาะที่ user ลงทะเบียนแล้ว
+    final registeredSubjects =
+        subjectProvider.subjects
+            .where((subj) => registeredSubjectIds.contains(subj.subjectId))
+            .toList();
+
+    // กรองตามวันที่เลือก (ถ้าเลือก "ทั้งหมด" แสดงหมด)
+    final filteredSubjects =
+        selectedDay == 'ทั้งหมด'
+            ? registeredSubjects
+            : registeredSubjects
+                .where((subj) => subj.day == selectedDay)
+                .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('ตารางเรียน'),
@@ -54,82 +64,62 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           },
         ),
       ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: futureSchedule,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            return Center(child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'));
-          }
-
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("ไม่พบข้อมูลตารางเรียน"));
-          }
-
-          final scheduleList = snapshot.data!;
-          final filteredList =
-              selectedDay == 'ทั้งหมด'
-                  ? scheduleList
-                  : scheduleList
-                      .where((item) => item['day'] == selectedDay)
-                      .toList();
-
-          return Column(
-            children: [
-              // ✅ ใช้ Widget ใหม่แทน
-              DaySelector(
-                selectedDay: selectedDay,
-                days: days,
-                onChanged: (value) {
-                  setState(() {
-                    selectedDay = value;
-                  });
-                },
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w),
-                  child: ListView.builder(
-                    itemCount: filteredList.length,
-                    itemBuilder: (context, index) {
-                      final item = filteredList[index];
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                        elevation: 4,
-                        margin: EdgeInsets.symmetric(vertical: 8.h),
-                        child: Padding(
-                          padding: EdgeInsets.all(16.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item["subject"] ?? "ไม่มีชื่อวิชา",
-                                style: TextStyle(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: 8.h),
-                              Text("ผู้สอน: ${item["teacher"] ?? "-"}"),
-                              Text("เวลา: ${item["time"] ?? "-"}"),
-                              Text("ห้อง: ${item["room"] ?? "-"}"),
-                              Text("วัน: ${item["day"] ?? "-"}"),
-                            ],
+      body: Column(
+        children: [
+          DaySelector(
+            selectedDay: selectedDay,
+            days: days,
+            onChanged: (value) {
+              setState(() {
+                selectedDay = value;
+              });
+            },
+          ),
+          Expanded(
+            child:
+                filteredSubjects.isEmpty
+                    ? const Center(child: Text('ไม่มีวิชาเรียนในวันนี้'))
+                    : ListView.builder(
+                      itemCount: filteredSubjects.length,
+                      itemBuilder: (context, index) {
+                        final subject = filteredSubjects[index];
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.r),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
+                          elevation: 4,
+                          margin: EdgeInsets.symmetric(
+                            vertical: 8.h,
+                            horizontal: 12.w,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(16.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${subject.subject} (${subject.subjectId})',
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 8.h),
+                                Text('ผู้สอน: ${subject.teacher}'),
+                                Text(
+                                  'เวลา: ${subject.startTime} - ${subject.endTime}',
+                                ),
+                                Text('ห้อง: ${subject.room}'),
+                                Text('วัน: ${subject.day}'),
+                                Text('หน่วยกิต: ${subject.credit}'),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+          ),
+        ],
       ),
     );
   }
