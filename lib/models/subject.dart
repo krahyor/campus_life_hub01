@@ -31,4 +31,17 @@ class Subject {
       credit: json['credit'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'subject_id': subjectId,
+      'subject': subject,
+      'teacher': teacher,
+      'day': day,
+      'start_time': startTime,
+      'end_time': endTime,
+      'room': room,
+      'credit': credit,
+    };
+  }
 }
