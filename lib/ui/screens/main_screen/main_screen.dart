@@ -1,10 +1,8 @@
 import 'package:campusapp/ui/screens/home_screen/home_screen.dart';
 import 'package:flutter/material.dart';
-
 import '../profile_screen/profile_screen.dart';
-import '../setting_screen/setting_screen.dart';
-import '../subject_screen/take_subject_screen.dart';
 import '../schedule_screen/schedule_screen.dart';
+import '../post_screen/post_screen.dart';
 
 class MainHomeScreen extends StatefulWidget {
   const MainHomeScreen({super.key});
@@ -21,8 +19,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     HomeScreen(),
     ScheduleScreen(),
     ProfileScreen(),
-    SettingsScreen(),
-    TakeSubjectScreen(),
+    PostListScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -48,11 +45,12 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             label: "ตารางเรียน",
           ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'โปรไฟล์'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'ตั้งค่า'),
+          BottomNavigationBarItem(icon: Icon(Icons.post_add), label: 'โพสต์'),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
+      // floatingActionButton: floatingActionButton,
     );
   }
 }
